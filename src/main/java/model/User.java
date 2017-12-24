@@ -8,6 +8,13 @@ public class User {
     private String password;
     private Role role;
 
+    private User(UserBuilder userBuilder) {
+        id = userBuilder.id;
+        email = userBuilder.email;
+        password = userBuilder.password;
+        role = userBuilder.role;
+    }
+
     public int getId() {
         return id;
     }
@@ -55,4 +62,37 @@ public class User {
     public int hashCode() {
         return Objects.hash(id, email, password, role);
     }
+
+    public static class UserBuilder {
+        private int id;
+        private String email;
+        private String password;
+        private Role role;
+
+        public UserBuilder id(int id) {
+            this.id = id;
+            return this;
+        }
+
+        public UserBuilder email(String email) {
+            this.email = email;
+            return this;
+        }
+
+        public UserBuilder password(String password) {
+            this.password = password;
+            return this;
+        }
+
+        public UserBuilder role(String role) {
+            this.role = Role.valueOf(role);
+            return this;
+        }
+
+        public User build(){
+           return new User(this);
+        }
+    }
+
+
 }
