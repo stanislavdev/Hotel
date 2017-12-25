@@ -40,13 +40,13 @@ public class MySQLUserDAO implements UserDAO {
             preparedStatement.setString(1, email);
             preparedStatement.setString(2, password);
             ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()){
+            if (resultSet.next()) {
                 return Optional.of(parseUser(resultSet));
             } else {
                 return Optional.empty();
             }
         } catch (SQLException e) {
-            //TODO: Logger
+            LOGGER.error(e);
             throw new RuntimeException(e);
         }
     }
