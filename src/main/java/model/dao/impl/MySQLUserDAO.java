@@ -2,6 +2,7 @@ package model.dao.impl;
 
 import model.dao.UserDAO;
 import model.entities.User;
+import org.apache.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -25,6 +26,8 @@ public class MySQLUserDAO implements UserDAO {
     private static String INSERT_USER = "INSERT INTO users (id, email, password, role) VALUES (?, ?, ?, ?)";
     private static String UPDATE_USER = "UPDATE users SET password = ? WHERE id = ?";
     private static String SELECT_USER_BY_EMAIL_AND_PASSWORD = "SELECT * FROM users WHERE email = ? AND password = ?";
+
+    private static final Logger LOGGER = Logger.getLogger(MySQLUserDAO.class);
 
     MySQLUserDAO(Connection connection) {
         this.connection = connection;
@@ -55,7 +58,7 @@ public class MySQLUserDAO implements UserDAO {
             ResultSet resultSet = preparedStatement.executeQuery();
             return parseUserList(resultSet);
         } catch (SQLException e) {
-            // TODO: Logger
+            LOGGER.error(e);
             throw new RuntimeException(e);
         }
     }
@@ -72,7 +75,7 @@ public class MySQLUserDAO implements UserDAO {
                 return Optional.empty();
             }
         } catch (SQLException e) {
-            // TODO: Logger
+            LOGGER.error(e);
             throw new RuntimeException(e);
         }
     }
@@ -87,7 +90,7 @@ public class MySQLUserDAO implements UserDAO {
             preparedStatement.setString(4, item.getRole().toString());
             return preparedStatement.executeUpdate() > 0;
         } catch (SQLException e) {
-            // TODO: Logger
+            LOGGER.error(e);
             throw new RuntimeException(e);
         }
     }
@@ -100,7 +103,7 @@ public class MySQLUserDAO implements UserDAO {
             preparedStatement.setInt(2, item.getId());
             return preparedStatement.executeUpdate() > 0;
         } catch (SQLException e) {
-            // TODO: Logger
+            LOGGER.error(e);
             throw new RuntimeException(e);
         }
     }
@@ -114,7 +117,7 @@ public class MySQLUserDAO implements UserDAO {
                     .role(resultSet.getString(ROLE))
                     .build();
         } catch (SQLException e) {
-            // TODO: Logger
+            LOGGER.error(e);
             throw new RuntimeException(e);
         }
     }
@@ -127,7 +130,7 @@ public class MySQLUserDAO implements UserDAO {
             }
             return userList;
         } catch (SQLException e) {
-            // TODO: Logger
+            LOGGER.error(e);
             throw new RuntimeException(e);
         }
     }
