@@ -114,7 +114,7 @@ public class MySQLUserDAO implements UserDAO {
                     .id(resultSet.getInt(ID))
                     .email(resultSet.getString(EMAIL))
                     .password(resultSet.getString(PASSWORD))
-                    .role(resultSet.getString(ROLE))
+                    .role(resultSet.getString(ROLE).toUpperCase())
                     .build();
         } catch (SQLException e) {
             LOGGER.error(e);
