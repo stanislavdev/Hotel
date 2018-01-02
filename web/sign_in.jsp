@@ -1,4 +1,10 @@
-<%--
+<%@ page import="model.services.impl.AccountServiceImpl" %>
+<%@ page import="model.entities.User" %>
+<%@ page import="model.dao.FactoryDAO" %>
+<%@ page import="model.dao.impl.MySQLFactoryDAO" %>
+<%@ page import="model.dao.impl.MySQLUserDAO" %>
+<%@ page import="model.dao.UserDAO" %>
+<%@ page import="model.entities.Role" %><%--
   Created by IntelliJ IDEA.
   User: stanislav
   Date: 01.01.18
@@ -19,6 +25,5 @@
         <button type="submit">Ok</button>
     </form>
 </div>
-
 </body>
 </html>

@@ -23,7 +23,7 @@ public class MySQLUserDAO implements UserDAO {
 
     private static String SELECT_ALL_USERS = "SELECT * FROM users";
     private static String SELECT_USER_BY_ID = "SELECT * FROM users WHERE id = ?";
-    private static String INSERT_USER = "INSERT INTO users (id, email, password, role) VALUES (?, ?, ?, ?)";
+    private static String INSERT_USER = "INSERT INTO users (email, password, role) VALUES (?, ?, ?)";
     private static String UPDATE_USER = "UPDATE users SET password = ? WHERE id = ?";
     private static String SELECT_USER_BY_EMAIL_AND_PASSWORD = "SELECT * FROM users WHERE email = ? AND password = ?";
 
@@ -84,10 +84,9 @@ public class MySQLUserDAO implements UserDAO {
     public boolean insert(User item) {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_USER);
-            preparedStatement.setInt(1, item.getId());
-            preparedStatement.setString(2, item.getEmail());
-            preparedStatement.setString(3, item.getPassword());
-            preparedStatement.setString(4, item.getRole().toString());
+            preparedStatement.setString(1, item.getEmail());
+            preparedStatement.setString(2, item.getPassword());
+            preparedStatement.setString(3, item.getRole().toString());
             return preparedStatement.executeUpdate() > 0;
         } catch (SQLException e) {
             LOGGER.error(e);
@@ -131,6 +130,15 @@ public class MySQLUserDAO implements UserDAO {
             return userList;
         } catch (SQLException e) {
             LOGGER.error(e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void close() {
+        try {
+            connection.close();
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }

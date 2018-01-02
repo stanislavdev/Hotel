@@ -11,4 +11,6 @@ public interface GenericDAO<T> {
     boolean insert(T item);
 
     boolean update(T item);
+
+    void close();
 }

@@ -24,7 +24,7 @@ public class MySQLFactoryDAO extends FactoryDAO {
         }
     }
 
-    private Connection getConnection() {
+    public Connection getConnection() {
         try {
             return dataSource.getConnection();
         } catch (SQLException e) {
