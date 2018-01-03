@@ -11,6 +11,6 @@
     </resource-ref>
 
     <welcome-file-list>
-        <welcome-file>/sign_in.jsp</welcome-file>
+        <welcome-file>sign_in.jsp</welcome-file>
     </welcome-file-list>
 </web-app>

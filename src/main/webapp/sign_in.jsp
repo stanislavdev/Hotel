@@ -1,10 +1,4 @@
-<%@ page import="model.services.impl.AccountServiceImpl" %>
-<%@ page import="model.entities.User" %>
-<%@ page import="model.dao.FactoryDAO" %>
-<%@ page import="model.dao.impl.MySQLFactoryDAO" %>
-<%@ page import="model.dao.impl.MySQLUserDAO" %>
-<%@ page import="model.dao.UserDAO" %>
-<%@ page import="model.entities.Role" %><%--
+<%--
   Created by IntelliJ IDEA.
   User: stanislav
   Date: 01.01.18
@@ -19,7 +13,7 @@
 <body>
 <div>
     <h3>Sign in</h3>
-    <form method="post">
+    <form method="post" action="/hotel/login">
         Email: <input type="email" name="email"/>
         Password: <input type="password" name="password">
         <button type="submit">Ok</button>

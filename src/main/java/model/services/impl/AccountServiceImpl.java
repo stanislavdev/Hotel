@@ -10,7 +10,19 @@ import java.sql.SQLException;
 import java.util.Optional;
 
 public class AccountServiceImpl implements AccountService {
-    private MySQLFactoryDAO factoryDAO = new MySQLFactoryDAO();
+    private MySQLFactoryDAO factoryDAO;
+
+    private static class AccountServiceImplHolder {
+        private static final AccountServiceImpl INSTANCE = new AccountServiceImpl();
+    }
+
+    public static AccountServiceImpl getInstance() {
+        return AccountServiceImplHolder.INSTANCE;
+    }
+
+    public AccountServiceImpl() {
+        factoryDAO = new MySQLFactoryDAO();
+    }
 
     @Override
     public Optional<User> signIn(String email, String password) {
