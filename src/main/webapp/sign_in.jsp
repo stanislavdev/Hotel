@@ -13,7 +13,7 @@
 <body>
 <div>
     <h3>Sign in</h3>
-    <form method="post" action="/hotel/login">
+    <form method="post" action="MainServlet">
         Email: <input type="email" name="email"/>
         Password: <input type="password" name="password">
         <button type="submit">Ok</button>

@@ -1,11 +1,12 @@
 package controller.commands;
 
-import com.sun.deploy.net.HttpRequest;
-import com.sun.deploy.net.HttpResponse;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 public class LoginPageCommand implements Command {
     @Override
-    public String execute(HttpRequest httpRequest, HttpResponse httpResponse) {
+    public String execute(HttpServletRequest httpRequest, HttpServletResponse httpResponse) {
         return SIGN_IN_PAGE;
     }
 }

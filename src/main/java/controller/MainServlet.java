@@ -1,6 +1,10 @@
 package controller;
 
 
+import controller.commands.Command;
+import controller.commands.SignInCommand;
+
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -11,10 +15,15 @@ import java.io.IOException;
 @WebServlet("/")
 public class MainServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        processRequest(request, response);
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        processRequest(request, response);
+    }
+
+    private void processRequest(HttpServletRequest request,
+                                HttpServletResponse response) throws ServletException, IOException {
 
     }
 }
