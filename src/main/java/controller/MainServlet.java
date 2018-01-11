@@ -2,7 +2,7 @@ package controller;
 
 
 import controller.commands.Command;
-import controller.commands.SignInCommand;
+import controller.commands.CommandFactory;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -25,5 +25,15 @@ public class MainServlet extends HttpServlet {
     private void processRequest(HttpServletRequest request,
                                 HttpServletResponse response) throws ServletException, IOException {
 
+        String commandAttribute = (String) request.getAttribute("command");
+        Command command = CommandFactory.createCommand(commandAttribute);
+        String page = command.execute(request, response);
+        if (page.startsWith("redirect:")) {
+            request.setAttribute("command", page.replace("redirect:", ""));
+            processRequest(request, response);
+        } else {
+            RequestDispatcher dispatcher = request.getRequestDispatcher(page);
+            dispatcher.forward(request, response);
+        }
     }
 }
