@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
   User: stanislav
@@ -13,10 +14,14 @@
 <body>
 <div>
     <h3>Sign in</h3>
-    <form method="post" action="MainServlet">
+    <form method="POST" action="/sign_in">
         Email: <input type="email" name="email"/>
         Password: <input type="password" name="password">
         <button type="submit">Ok</button>
+    </form>
+
+    <form method="POST" action="/registration_page">
+        <button type="submit">Registration</button>
     </form>
 </div>
 </body>
