@@ -1,5 +1,7 @@
-package controller.commands;
+package controller.commands.commonCommands;
 
+
+import controller.commands.Command;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
