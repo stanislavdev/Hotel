@@ -5,12 +5,14 @@ public class Bill {
     private User admin;
     private Order order;
     private int price;
+    private int isPaid;
 
     private Bill(BillBuilder billBuilder) {
         this.id = billBuilder.id;
         this.admin = billBuilder.admin;
         this.order = billBuilder.order;
         this.price = billBuilder.price;
+        this.isPaid = billBuilder.isPaid;
     }
 
     public int getId() {
@@ -50,9 +52,15 @@ public class Bill {
         private User admin;
         private Order order;
         private int price;
+        private int isPaid;
 
         public BillBuilder id(int id) {
             this.id = id;
+            return this;
+        }
+
+        public BillBuilder isPaid(int isPaid){
+            this.isPaid = isPaid;
             return this;
         }
 
