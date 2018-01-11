@@ -42,11 +42,31 @@
 <div>
     <h2>History</h2>
     <hr>
-    <c:forEach items="${sessionScope.orders}" var="item">
-        <c:out value="${item.numberOfRooms}"/>
-        <c:out value="${item.apartmentType}"/>
-        <br>
-    </c:forEach>
+    <table>
+        <tr>
+            <th>Number of rooms</th>
+            <th>Apartment type</th>
+            <th>Status</th>
+        </tr>
+        <c:forEach items="${sessionScope.orders}" var="item">
+            <tr>
+                <td><c:out value="${item.numberOfRooms}"/></td>
+                <td><c:out value="${item.apartmentType}"/></td>
+                <td><c:choose>
+                    <c:when test="${item.accepted == 1}">
+                        <c:out value="accepted"></c:out>
+                    </c:when>
+                    <c:otherwise>
+                        <c:out value="in progress"></c:out>
+                    </c:otherwise>
+                </c:choose>
+                </td>
+            </tr>
+        </c:forEach>
+    </table>
+
+    <br>
+
 </div>
 
 </body>
