@@ -2,6 +2,7 @@ package model.services.impl;
 
 import model.dao.OrderDAO;
 import model.dao.impl.MySQLFactoryDAO;
+import model.dao.impl.MySQLOrderDAO;
 import model.entities.ApartmentType;
 import model.entities.Order;
 import model.entities.User;
@@ -36,5 +37,11 @@ public class OrderServiceImpl implements OrderService {
     public List<Order> showUserOrders(User user) {
         OrderDAO orderDAO = factoryDAO.getOrderDAO();
         return orderDAO.findByUser(user);
+    }
+
+    @Override
+    public List<Order> getAllOrders() {
+        OrderDAO orderDAO = factoryDAO.getOrderDAO();
+        return orderDAO.getAll();
     }
 }
