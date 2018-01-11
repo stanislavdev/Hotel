@@ -45,7 +45,7 @@ public class MySQLFactoryDAO extends FactoryDAO {
 
     @Override
     public OrderDAO getOrderDAO() {
-        return null;
+        return new MySQLOrderDAO(getConnection());
     }
 
     @Override
