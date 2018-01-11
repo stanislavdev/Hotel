@@ -81,12 +81,12 @@ public class MySQLUserDAO implements UserDAO {
     }
 
     @Override
-    public boolean insert(User item) {
+    public boolean insert(User object) {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_USER);
-            preparedStatement.setString(1, item.getEmail());
-            preparedStatement.setString(2, item.getPassword());
-            preparedStatement.setString(3, item.getRole().toString());
+            preparedStatement.setString(1, object.getEmail());
+            preparedStatement.setString(2, object.getPassword());
+            preparedStatement.setString(3, String.valueOf(object.getRole()));
             return preparedStatement.executeUpdate() > 0;
         } catch (SQLException e) {
             LOGGER.error(e);
@@ -95,11 +95,11 @@ public class MySQLUserDAO implements UserDAO {
     }
 
     @Override
-    public boolean update(User item) {
+    public boolean update(User object) {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_USER);
-            preparedStatement.setString(1, item.getPassword());
-            preparedStatement.setInt(2, item.getId());
+            preparedStatement.setString(1, object.getPassword());
+            preparedStatement.setInt(2, object.getId());
             return preparedStatement.executeUpdate() > 0;
         } catch (SQLException e) {
             LOGGER.error(e);
@@ -122,8 +122,8 @@ public class MySQLUserDAO implements UserDAO {
     }
 
     private List<User> parseUserList(ResultSet resultSet) {
+        List<User> userList = new ArrayList<>();
         try {
-            List<User> userList = new ArrayList<>();
             while (resultSet.next()) {
                 userList.add(parseUser(resultSet));
             }
