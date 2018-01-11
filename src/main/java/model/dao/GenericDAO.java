@@ -8,9 +8,9 @@ public interface GenericDAO<T> {
 
     Optional<T> getById(int id);
 
-    boolean insert(T item);
+    boolean insert(T object);
 
-    boolean update(T item);
+    boolean update(T object);
 
     void close();
 }
