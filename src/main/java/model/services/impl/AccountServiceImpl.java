@@ -12,13 +12,13 @@ import java.util.Optional;
 public class AccountServiceImpl implements AccountService {
     private MySQLFactoryDAO factoryDAO;
 
-    private static class AccountServiceImplHolder {
-        private static final AccountServiceImpl INSTANCE = new AccountServiceImpl();
-    }
-
-    public static AccountServiceImpl getInstance() {
-        return AccountServiceImplHolder.INSTANCE;
-    }
+//    private static class AccountServiceImplHolder {
+//        private static final AccountServiceImpl INSTANCE = new AccountServiceImpl();
+//    }
+//
+//    public static AccountServiceImpl getInstance() {
+//        return AccountServiceImplHolder.INSTANCE;
+//    }
 
     public AccountServiceImpl() {
         factoryDAO = new MySQLFactoryDAO();
@@ -37,7 +37,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public void signUp(User user) {
+    public void signUp(User user) throws SQLException {
         try (Connection connection = factoryDAO.getConnection()) {
             connection.setAutoCommit(false);
             UserDAO userDAO = factoryDAO.getUserDAO();
@@ -46,8 +46,6 @@ public class AccountServiceImpl implements AccountService {
             } else {
                 connection.rollback();
             }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
         }
     }
 }
