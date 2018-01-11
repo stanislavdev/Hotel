@@ -10,6 +10,7 @@ public class Order {
     private Date dateFrom;
     private Date dateTo;
     private int accepted;
+    private int clientId;
     private User client;
     private List<Apartment> apartments;
 
@@ -23,6 +24,7 @@ public class Order {
         this.accepted = orderBuilder.accepted;
         this.client = orderBuilder.client;
         this.apartments = orderBuilder.apartments;
+        this.clientId = orderBuilder.clientId;
     }
 
     public int getId() {
@@ -96,6 +98,7 @@ public class Order {
         private Date dateFrom;
         private Date dateTo;
         private int accepted;
+        private int clientId;
         private User client;
         private List<Apartment> apartments;
 
@@ -129,6 +132,10 @@ public class Order {
             return this;
         }
 
+        public OrderBuilder clintId(int clientId){
+            this.clientId = clientId;
+            return this;
+        }
         public OrderBuilder client(User client){
             this.client = client;
             return this;
