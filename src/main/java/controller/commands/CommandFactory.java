@@ -2,7 +2,7 @@ package controller.commands;
 
 
 import controller.commands.adminCommands.AdminHomePageCommand;
-import controller.commands.clientCommands.ClientPageCommand;
+import controller.commands.clientCommands.ClientHomePageCommand;
 import controller.commands.clientCommands.CreateOrderCommand;
 import controller.commands.commonCommands.*;
 
@@ -36,7 +36,7 @@ public class CommandFactory {
             case ADMIN_HOME_PAGE:
                 return new AdminHomePageCommand();
             case CLIENT_HOME_PAGE:
-                return new ClientPageCommand();
+                return new ClientHomePageCommand();
             case CREATE_ORDER:
                 return new CreateOrderCommand();
             default:
