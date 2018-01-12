@@ -23,7 +23,7 @@ public class MySQLBillDAO implements BillDAO {
     private static final String ORDER_ID = "bills.order_id";
     private static final String IS_PAID = "bills.isPaid";
 
-    private static final String SELECT_ALL_APARTMENT = "SELECT * FROM apartments";
+    private static final String SELECT_ALL_APARTMENT = "SELECT * FROM bills";
 
     MySQLBillDAO(Connection connection) {
         this.connection = connection;
