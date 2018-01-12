@@ -2,19 +2,21 @@ package controller.commands;
 
 
 import controller.commands.adminCommands.AdminHomePageCommand;
+import controller.commands.adminCommands.ChoseApartmentForOrderCommand;
 import controller.commands.clientCommands.ClientHomePageCommand;
 import controller.commands.clientCommands.CreateOrderCommand;
 import controller.commands.commonCommands.*;
 
 public class CommandFactory {
-    public static final String SIGN_IN = "/sign_in";
-    public static final String LOGIN_PAGE = "/login_page";
-    public static final String REGISTRATION_PAGE = "/registration_page";
-    public static final String REGISTRATION = "/registration";
-    public static final String SIGN_OUT = "/sign_out";
-    public static final String ADMIN_HOME_PAGE = "/admin_home_page";
-    public static final String CLIENT_HOME_PAGE = "/client_home_page";
-    public static final String CREATE_ORDER = "/create_order";
+    public static final String SIGN_IN = "/hotel/sign_in";
+    public static final String LOGIN_PAGE = "/hotel/login_page";
+    public static final String REGISTRATION_PAGE = "/hotel/registration_page";
+    public static final String REGISTRATION = "/hotel/registration";
+    public static final String SIGN_OUT = "/hotel/sign_out";
+    public static final String ADMIN_HOME_PAGE = "/hotel/admin_home_page";
+    public static final String CLIENT_HOME_PAGE = "/hotel/client_home_page";
+    public static final String CREATE_ORDER = "/hotel/create_order";
+    public static final String CHOSE_APARTMENT_BY_ADMIN = "/hotel/chose-apartment";
 
     public static Command createCommand(String command) {
 
@@ -39,6 +41,8 @@ public class CommandFactory {
                 return new ClientHomePageCommand();
             case CREATE_ORDER:
                 return new CreateOrderCommand();
+            case CHOSE_APARTMENT_BY_ADMIN:
+                return new ChoseApartmentForOrderCommand();
             default:
                 return new SignInCommand();
         }

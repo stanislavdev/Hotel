@@ -1,6 +1,8 @@
 package controller.filters;
 
 
+import controller.commands.Command;
+import controller.commands.CommandFactory;
 import model.entities.Role;
 import model.entities.User;
 
@@ -12,7 +14,7 @@ import java.util.*;
 
 import static controller.commands.CommandFactory.*;
 
-@WebFilter("/*")
+@WebFilter("/hotel/*")
 public class RequestLoginFilter implements Filter {
 
     private List<String> commonCommands = new ArrayList<>();
@@ -35,6 +37,7 @@ public class RequestLoginFilter implements Filter {
 
         adminCommands.add(ADMIN_HOME_PAGE);
         adminCommands.add(SIGN_OUT);
+        adminCommands.add(CHOSE_APARTMENT_BY_ADMIN);
     }
 
     @Override

@@ -13,7 +13,7 @@
 </head>
 <body>
 <h2>Book apartment</h2>
-<form method="post" action="/create_order">
+<form method="post" action="/hotel/create_order">
     <select name="numberOfRooms">
         <option value="1">1</option>
         <option value="2">2</option>
@@ -35,7 +35,7 @@
     <input name="submit" type="submit" value="Confirm">
 </form>
 
-<form action="/sign_out" method="post">
+<form action="/hotel/sign_out" method="post">
     <button type="submit">Exit</button>
 </form>
 

@@ -40,7 +40,7 @@ public class MySQLFactoryDAO extends FactoryDAO {
 
     @Override
     public ApartmentDAO getApartmentDAO() {
-        return null;
+        return new MySQLApartmentDAO(getConnection());
     }
 
     @Override

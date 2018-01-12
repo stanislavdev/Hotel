@@ -31,7 +31,8 @@ public class MySQLOrderDAO implements OrderDAO {
             "VALUES (?,?,?,?,?,?)";
     private static final String SELECT_ORDER_BY_USER = "SELECT * FROM orders " +
             "WHERE orders.client_id = ?";
-    public static final String SELECT_ALL_ORDERS = "SELECT * FROM orders";
+    private static final String SELECT_ALL_ORDERS = "SELECT * FROM orders";
+    private static final String SELCT_BY_ID = "SELECT * FROM orders WHERE orders.id = ?";
 
 
 
@@ -68,7 +69,19 @@ public class MySQLOrderDAO implements OrderDAO {
 
     @Override
     public Optional<Order> getById(int id) {
-        return Optional.empty();
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(SELCT_BY_ID);
+            preparedStatement.setInt(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()){
+                return Optional.of(parseOrder(resultSet));
+            } else {
+                return Optional.empty();
+            }
+        } catch (SQLException e) {
+            LOGGER.error(e);
+            throw new RuntimeException(e);
+        }
     }
 
     @Override

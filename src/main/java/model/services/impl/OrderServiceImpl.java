@@ -10,6 +10,7 @@ import model.services.OrderService;
 
 import java.sql.Date;
 import java.util.List;
+import java.util.Optional;
 
 public class OrderServiceImpl implements OrderService {
     private MySQLFactoryDAO factoryDAO;
@@ -43,5 +44,11 @@ public class OrderServiceImpl implements OrderService {
     public List<Order> getAllOrders() {
         OrderDAO orderDAO = factoryDAO.getOrderDAO();
         return orderDAO.getAll();
+    }
+
+    @Override
+    public Optional<Order> getById(int id) {
+        OrderDAO  orderDAO= factoryDAO.getOrderDAO();
+        return orderDAO.getById(id);
     }
 }

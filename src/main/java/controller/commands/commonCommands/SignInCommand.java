@@ -7,6 +7,7 @@ import model.entities.User;
 import model.services.AccountService;
 import model.services.impl.AccountServiceImpl;
 import org.apache.log4j.Logger;
+import org.omg.CORBA.COMM_FAILURE;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -36,10 +37,10 @@ public class SignInCommand implements Command {
                 return "redirect:" +  CommandFactory.ADMIN_HOME_PAGE;
             } else {
                 LOGGER.info("Client " + user.get().getId() + " sign in");
-                return "redirect:" +  CommandFactory.CLIENT_HOME_PAGE;
+                return "redirect:" + CommandFactory.CLIENT_HOME_PAGE;
             }
         } else {
-            return SIGN_IN_PAGE;
+            return SIGN_IN_JSP;
         }
     }
 }

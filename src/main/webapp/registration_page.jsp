@@ -13,7 +13,7 @@
 <body>
 <h2>Create Your Account</h2>
 
-<form action="/registration" method="POST">
+<form action="/hotel/registration" method="POST">
     Email:<input name="emailRegistration" type="email">
     Password:<input name="passwordRegistration" type="password">
     <button type="submit">Continue</button>

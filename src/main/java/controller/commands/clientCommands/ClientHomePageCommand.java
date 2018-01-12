@@ -17,6 +17,6 @@ public class ClientHomePageCommand implements Command {
         OrderService orderService = new OrderServiceImpl();
         List<Order> orders = orderService.showUserOrders(user);
         request.getSession().setAttribute("orders", orders);
-        return CLIENT_HOME_PAGE;
+        return CLIENT_HOME_JSP;
     }
 }

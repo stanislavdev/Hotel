@@ -19,6 +19,6 @@ public class SignOutCommand implements Command {
             LOGGER.info("Client " + user.getId() + " sign out");
         }
         httpRequest.getSession().invalidate();
-        return SIGN_IN_PAGE;
+        return SIGN_IN_JSP;
     }
 }
