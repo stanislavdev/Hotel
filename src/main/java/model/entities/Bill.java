@@ -6,6 +6,8 @@ public class Bill {
     private Order order;
     private int price;
     private int isPaid;
+    private int adminId;
+    private int orderId;
 
     private Bill(BillBuilder billBuilder) {
         this.id = billBuilder.id;
@@ -13,6 +15,8 @@ public class Bill {
         this.order = billBuilder.order;
         this.price = billBuilder.price;
         this.isPaid = billBuilder.isPaid;
+        this.adminId = billBuilder.adminId;
+        this.orderId = billBuilder.orderId;
     }
 
     public int getId() {
@@ -53,9 +57,21 @@ public class Bill {
         private Order order;
         private int price;
         private int isPaid;
+        private int adminId;
+        private int orderId;
 
         public BillBuilder id(int id) {
             this.id = id;
+            return this;
+        }
+
+        public BillBuilder adminId(int adminId) {
+            this.adminId = adminId;
+            return this;
+        }
+
+        public BillBuilder orderId(int orderId) {
+            this.orderId = orderId;
             return this;
         }
 
