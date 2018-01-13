@@ -18,16 +18,18 @@ public class MySQLApartmentDAO implements ApartmentDAO {
 
     private static final Logger LOGGER = Logger.getLogger(MySQLApartmentDAO.class);
 
-    private static final String ID = "apartments.id";
-    private static final String NUMBERS_OF_ROOMS = "apartments.numberOfRooms";
-    private static final String PRICE = "apartments.price";
-    private static final String TYPE = "apartments.type";
+    private static final String ID = "id";
+    private static final String NUMBERS_OF_ROOMS = "numberOfRooms";
+    private static final String PRICE = "price";
+    private static final String TYPE = "type";
 
     private static final String SELECT_AVAILABLE_APARTMENTS = "SELECT * FROM apartments LEFT JOIN " +
-            "  orders_has_apartments o ON apartments.id = o.apartments_id " +
-            "LEFT JOIN orders o2 ON o.orders_id = o2.id " +
+            "  orders_has_apartments ON apartments.id = orders_has_apartments.apartments_id " +
+            "LEFT JOIN orders ON orders_has_apartments.orders_id = orders.id " +
             "WHERE apartments.type = ? AND apartments.numberOfRooms = ? " +
-            "AND (dateTo < ? OR dateTo IS NULL)";
+            "AND (orders.dateTo < ? OR orders.dateTo IS NULL)";
+
+    private static final String SELECT_ALL_APARTMENTS = "SELECT * FROM apartments";
 
     MySQLApartmentDAO(Connection connection) {
         this.connection = connection;
@@ -60,7 +62,14 @@ public class MySQLApartmentDAO implements ApartmentDAO {
 
     @Override
     public List<Apartment> getAll() {
-        return null;
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_APARTMENTS);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            return parseApartmentList(resultSet);
+        } catch (SQLException e) {
+            LOGGER.error(e);
+            throw new RuntimeException(e);
+        }
     }
 
     @Override

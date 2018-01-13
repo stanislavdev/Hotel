@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
   User: stanislav
@@ -11,6 +12,26 @@
     <title>Title</title>
 </head>
 <body>
-afsdfsdf
+<c:out value="Chose an apartment for ${client.email}"/>
+<form method="post" action="/hotel/create-bill">
+    <table>
+        <tr>
+            <th>Number of rooms</th>
+            <th>Type</th>
+            <th>Price</th>
+        </tr>
+        <c:forEach items="${sessionScope.apartments}" var="item">
+            <tr>
+                <td><c:out value="${item.numberOfRooms}"/></td>
+                <td><c:out value="${item.apartmentType}"/></td>
+                <td><c:out value="${item.price}"/></td>
+                <td>
+                    <input type="radio" name="chosenApartment" value="${item.id}"/>
+                </td>
+            </tr>
+        </c:forEach>
+    </table>
+    <input type="submit" value="Send a bill">
+</form>
 </body>
 </html>

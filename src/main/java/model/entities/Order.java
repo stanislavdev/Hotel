@@ -91,6 +91,29 @@ public class Order {
         this.apartments = apartments;
     }
 
+    public int getClientId() {
+        return clientId;
+    }
+
+    public void setClientId(int clientId) {
+        this.clientId = clientId;
+    }
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "id=" + id +
+                ", numberOfRooms=" + numberOfRooms +
+                ", apartmentType=" + apartmentType +
+                ", dateFrom=" + dateFrom +
+                ", dateTo=" + dateTo +
+                ", accepted=" + accepted +
+                ", clientId=" + clientId +
+                ", client=" + client +
+                ", apartments=" + apartments +
+                '}';
+    }
+
     public static class OrderBuilder{
         private int id;
         private int numberOfRooms;
