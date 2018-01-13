@@ -9,4 +9,5 @@ public interface AccountService {
     Optional<User> signIn(String email, String password);
 
     void signUp(User user) throws SQLException;
+    Optional<User> getById(int id);
 }

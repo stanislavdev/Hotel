@@ -48,4 +48,10 @@ public class AccountServiceImpl implements AccountService {
             }
         }
     }
+
+    @Override
+    public Optional<User> getById(int id) {
+        UserDAO userDAO = factoryDAO.getUserDAO();
+        return userDAO.getById(id);
+    }
 }
