@@ -20,4 +20,10 @@ public class ApartmentServiceImpl implements ApartmentService {
         ApartmentDAO apartmentDAO = factoryDAO.getApartmentDAO();
         return apartmentDAO.showAvailable(order);
     }
+
+    @Override
+    public List<Apartment> getAll() {
+        ApartmentDAO apartmentDAO = factoryDAO.getApartmentDAO();
+        return apartmentDAO.getAll();
+    }
 }

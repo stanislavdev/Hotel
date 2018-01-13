@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface ApartmentService {
     List<Apartment> showAvailableApartments(Order order);
+    List<Apartment> getAll();
 }
