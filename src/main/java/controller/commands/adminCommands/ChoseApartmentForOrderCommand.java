@@ -21,6 +21,7 @@ public class ChoseApartmentForOrderCommand implements Command {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
         String orderId = request.getParameter("chosenRadio");
+        request.getSession().setAttribute("orderId", orderId);
         ApartmentService apartmentService = new ApartmentServiceImpl();
         OrderService orderService = new OrderServiceImpl();
         Optional<Order> order = orderService.getById(Integer.parseInt(orderId));

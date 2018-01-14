@@ -51,4 +51,16 @@ public class OrderServiceImpl implements OrderService {
         OrderDAO  orderDAO= factoryDAO.getOrderDAO();
         return orderDAO.getById(id);
     }
+
+    @Override
+    public void updateToAccepted(Order order) {
+        OrderDAO orderDAO = factoryDAO.getOrderDAO();
+        orderDAO.update(order);
+    }
+
+    @Override
+    public void insertIntoOrderHasApartments(int orderId, int apartmentId) {
+        OrderDAO orderDAO = factoryDAO.getOrderDAO();
+        orderDAO.insertIntoOrdersHasApartments(orderId, apartmentId);
+    }
 }

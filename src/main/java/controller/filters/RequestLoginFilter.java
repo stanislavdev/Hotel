@@ -38,6 +38,7 @@ public class RequestLoginFilter implements Filter {
         adminCommands.add(ADMIN_HOME_PAGE);
         adminCommands.add(SIGN_OUT);
         adminCommands.add(CHOSE_APARTMENT_BY_ADMIN);
+        adminCommands.add(SEND_BILL_TO_CLIENT);
     }
 
     @Override

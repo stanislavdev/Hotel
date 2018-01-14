@@ -32,7 +32,10 @@ public class MySQLOrderDAO implements OrderDAO {
     private static final String SELECT_ORDER_BY_USER = "SELECT * FROM orders " +
             "WHERE orders.client_id = ?";
     private static final String SELECT_ALL_ORDERS = "SELECT * FROM orders";
-    private static final String SELCT_BY_ID = "SELECT * FROM orders WHERE orders.id = ?";
+    private static final String SELECT_BY_ID = "SELECT * FROM orders WHERE orders.id = ?";
+    private static final String UPDATE_TO_ACCEPTED = "UPDATE orders SET orders.accepted = 1 WHERE orders.id = ?";
+    private static final String INSERT_INTO_ORDERS_HAS_APARTMENTS = "INSERT INTO orders_has_apartments " +
+            "(orders_id, apartments_id) VALUES (?,?)";
 
 
 
@@ -55,6 +58,19 @@ public class MySQLOrderDAO implements OrderDAO {
     }
 
     @Override
+    public void insertIntoOrdersHasApartments(int orderId, int apartmentId) {
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(INSERT_INTO_ORDERS_HAS_APARTMENTS);
+            preparedStatement.setInt(1, orderId);
+            preparedStatement.setInt(2, apartmentId);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            LOGGER.error(e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
     public List<Order> getAll() {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_ORDERS);
@@ -70,7 +86,7 @@ public class MySQLOrderDAO implements OrderDAO {
     @Override
     public Optional<Order> getById(int id) {
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement(SELCT_BY_ID);
+            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BY_ID);
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()){
@@ -103,7 +119,14 @@ public class MySQLOrderDAO implements OrderDAO {
 
     @Override
     public boolean update(Order object) {
-        return false;
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_TO_ACCEPTED);
+            preparedStatement.setInt(1, object.getId());
+            return preparedStatement.executeUpdate() > 0;
+        } catch (SQLException e) {
+            LOGGER.error(e);
+            throw new RuntimeException(e);
+        }
     }
 
     @Override

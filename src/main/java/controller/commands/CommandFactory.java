@@ -3,6 +3,7 @@ package controller.commands;
 
 import controller.commands.adminCommands.AdminHomePageCommand;
 import controller.commands.adminCommands.ChoseApartmentForOrderCommand;
+import controller.commands.adminCommands.SendBillCommand;
 import controller.commands.clientCommands.ClientHomePageCommand;
 import controller.commands.clientCommands.CreateOrderCommand;
 import controller.commands.commonCommands.*;
@@ -17,6 +18,7 @@ public class CommandFactory {
     public static final String CLIENT_HOME_PAGE = "/hotel/client_home_page";
     public static final String CREATE_ORDER = "/hotel/create_order";
     public static final String CHOSE_APARTMENT_BY_ADMIN = "/hotel/chose-apartment";
+    public static final String SEND_BILL_TO_CLIENT = "/hotel/create-bill";
 
     public static Command createCommand(String command) {
 
@@ -43,6 +45,8 @@ public class CommandFactory {
                 return new CreateOrderCommand();
             case CHOSE_APARTMENT_BY_ADMIN:
                 return new ChoseApartmentForOrderCommand();
+            case SEND_BILL_TO_CLIENT:
+                return new SendBillCommand();
             default:
                 return new SignInCommand();
         }

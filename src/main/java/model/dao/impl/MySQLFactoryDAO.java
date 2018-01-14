@@ -50,6 +50,6 @@ public class MySQLFactoryDAO extends FactoryDAO {
 
     @Override
     public BillDAO getBillDAO() {
-        return null;
+        return new MySQLBillDAO(getConnection());
     }
 }

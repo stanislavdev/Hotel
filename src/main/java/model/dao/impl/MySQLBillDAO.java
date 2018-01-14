@@ -24,6 +24,8 @@ public class MySQLBillDAO implements BillDAO {
     private static final String IS_PAID = "bills.isPaid";
 
     private static final String SELECT_ALL_APARTMENT = "SELECT * FROM bills";
+    private static final String INSERT = "INSERT INTO bills (admin_id,order_id,isPaid,price) " +
+            "VALUE (?,?,?,?)";
 
     MySQLBillDAO(Connection connection) {
         this.connection = connection;
@@ -48,7 +50,17 @@ public class MySQLBillDAO implements BillDAO {
 
     @Override
     public boolean insert(Bill object) {
-        return false;
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(INSERT);
+            preparedStatement.setInt(1,object.getAdmin().getId());
+            preparedStatement.setInt(2,object.getOrder().getId());
+            preparedStatement.setInt(3,object.getIsPaid());
+            preparedStatement.setInt(4,object.getPrice());
+            return preparedStatement.executeUpdate() > 0;
+        } catch (SQLException e) {
+            LOGGER.error(e);
+            throw new RuntimeException(e);
+        }
     }
 
     @Override

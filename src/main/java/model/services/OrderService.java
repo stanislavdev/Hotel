@@ -13,4 +13,6 @@ public interface OrderService {
     List<Order> showUserOrders(User user);
     List<Order> getAllOrders();
     Optional<Order> getById(int id);
+    void updateToAccepted(Order order);
+    void insertIntoOrderHasApartments(int orderId, int apartmentId);
 }

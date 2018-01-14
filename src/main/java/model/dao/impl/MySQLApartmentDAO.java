@@ -30,6 +30,7 @@ public class MySQLApartmentDAO implements ApartmentDAO {
             "AND (orders.dateTo < ? OR orders.dateTo IS NULL)";
 
     private static final String SELECT_ALL_APARTMENTS = "SELECT * FROM apartments";
+    private static final String SELECT_BY_ID = "SELECT * FROM apartments WHERE  id = ?";
 
     MySQLApartmentDAO(Connection connection) {
         this.connection = connection;
@@ -74,7 +75,18 @@ public class MySQLApartmentDAO implements ApartmentDAO {
 
     @Override
     public Optional<Apartment> getById(int id) {
-        return Optional.empty();
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BY_ID);
+            preparedStatement.setInt(1 , id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()){
+                return Optional.of(parseApartment(resultSet));
+            } else
+                return Optional.empty();
+        } catch (SQLException e) {
+            LOGGER.error(e);
+            throw new RuntimeException(e);
+        }
     }
 
     @Override

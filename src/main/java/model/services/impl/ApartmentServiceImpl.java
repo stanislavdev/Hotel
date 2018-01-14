@@ -7,6 +7,7 @@ import model.entities.Order;
 import model.services.ApartmentService;
 
 import java.util.List;
+import java.util.Optional;
 
 public class ApartmentServiceImpl implements ApartmentService {
     private MySQLFactoryDAO factoryDAO;
@@ -25,5 +26,12 @@ public class ApartmentServiceImpl implements ApartmentService {
     public List<Apartment> getAll() {
         ApartmentDAO apartmentDAO = factoryDAO.getApartmentDAO();
         return apartmentDAO.getAll();
+    }
+
+    @Override
+    public Optional<Apartment> getById(int id) {
+        ApartmentDAO apartmentDAO = factoryDAO.getApartmentDAO();
+        return apartmentDAO.getById(id);
+
     }
 }

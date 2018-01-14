@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface OrderDAO extends GenericDAO<Order> {
     List<Order> findByUser(User user);
+    void insertIntoOrdersHasApartments(int orderId, int apartmentId);
 }
