@@ -14,13 +14,15 @@
 <body>
 <div>
     <h3>Sign in</h3>
-    <form method="POST" action="/hotel/sign_in">
+    <form method="POST" action="/hotel/home">
+        <input type="hidden" name="command" value="sign_in">
         Email: <input type="email" name="email"/>
         Password: <input type="password" name="password">
         <button type="submit">Ok</button>
     </form>
 
-    <form method="POST" action="/hotel/registration_page">
+    <form method="POST" action="/hotel/registration-page">
+        <input type="hidden" name="command" value="registration_page">
         <button type="submit">Registration</button>
     </form>
 </div>

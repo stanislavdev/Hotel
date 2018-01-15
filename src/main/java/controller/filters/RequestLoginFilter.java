@@ -2,9 +2,9 @@ package controller.filters;
 
 
 import controller.commands.Command;
-import controller.commands.CommandFactory;
 import model.entities.Role;
 import model.entities.User;
+import model.util.Pages;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
@@ -32,6 +32,7 @@ public class RequestLoginFilter implements Filter {
         commonCommands.add(REGISTRATION_PAGE);
 
         clientCommands.add(CLIENT_HOME_PAGE);
+        clientCommands.add(CLIENT_BILLS_PAGE);
         clientCommands.add(SIGN_OUT);
         clientCommands.add(CREATE_ORDER);
 
@@ -44,16 +45,20 @@ public class RequestLoginFilter implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
-        String command = request.getRequestURI();
+        String command = String.valueOf(request.getParameter("command"));
+        String uri = request.getRequestURI();
+        System.out.println(uri);
         User user = (User) request.getSession().getAttribute("user");
 
         boolean isGuest = (user == null) && commonCommands.contains(command);
-        boolean isAdmin = (user != null) && user.getRole().equals(Role.ADMIN) && adminCommands.contains(command);
-        boolean isClient = (user != null) && user.getRole().equals(Role.CLIENT) && clientCommands.contains(command);
+        boolean isAdmin = (user != null) && user.getRole().equals(Role.ADMIN) &&
+                adminCommands.contains(command);
+        boolean isClient = (user != null) && user.getRole().equals(Role.CLIENT) &&
+                clientCommands.contains(command);
 
         boolean isSignedIn = (user != null) && commonCommands.contains(command);
-
-        boolean needToSignIn = (user == null) && (clientCommands.contains(command) || adminCommands.contains(command));
+        boolean needToSignIn = (user == null) &&
+                (clientCommands.contains(command) || adminCommands.contains(command));
 
         if (isAdmin || isClient || isGuest) {
             request.setAttribute("command", command);
@@ -69,7 +74,7 @@ public class RequestLoginFilter implements Filter {
         }
 
         if (needToSignIn) {
-            request.setAttribute("command" , LOGIN_PAGE);
+            request.setAttribute("command", LOGIN_PAGE);
         }
 
         filterChain.doFilter(request, servletResponse);

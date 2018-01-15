@@ -26,6 +26,9 @@ public class MySQLBillDAO implements BillDAO {
     private static final String SELECT_ALL_APARTMENT = "SELECT * FROM bills";
     private static final String INSERT = "INSERT INTO bills (admin_id,order_id,isPaid,price) " +
             "VALUE (?,?,?,?)";
+    private static final String SELECT_BILLS_FOR_CLIENT = "SELECT * FROM bills JOIN orders " +
+            "ON bills.order_id = orders.id " +
+            "JOIN users ON orders.client_id = users.id WHERE client_id = ?";
 
     MySQLBillDAO(Connection connection) {
         this.connection = connection;
@@ -57,6 +60,20 @@ public class MySQLBillDAO implements BillDAO {
             preparedStatement.setInt(3,object.getIsPaid());
             preparedStatement.setInt(4,object.getPrice());
             return preparedStatement.executeUpdate() > 0;
+        } catch (SQLException e) {
+            LOGGER.error(e);
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    @Override
+    public List<Bill> getBillsByClientId(int id) {
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BILLS_FOR_CLIENT);
+            preparedStatement.setInt(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            return parseBillList(resultSet);
         } catch (SQLException e) {
             LOGGER.error(e);
             throw new RuntimeException(e);
@@ -105,4 +122,5 @@ public class MySQLBillDAO implements BillDAO {
             throw new RuntimeException(e);
         }
     }
+
 }

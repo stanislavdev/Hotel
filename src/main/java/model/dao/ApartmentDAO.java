@@ -12,4 +12,6 @@ public interface ApartmentDAO extends GenericDAO<Apartment> {
     List<Apartment> findByNumberOfRooms(int numberOfRooms);
 
     List<Apartment> showAvailable(Order apartmentInOrder);
+
+    Apartment getByOrderID(int orderId);
 }

@@ -31,6 +31,8 @@ public class MySQLApartmentDAO implements ApartmentDAO {
 
     private static final String SELECT_ALL_APARTMENTS = "SELECT * FROM apartments";
     private static final String SELECT_BY_ID = "SELECT * FROM apartments WHERE  id = ?";
+    private static final String SELECT_APARTMENT_FROM_ORDER = "SELECT * FROM orders_has_apartments " +
+            "WHERE orders_id = ?";
 
     MySQLApartmentDAO(Connection connection) {
         this.connection = connection;
@@ -55,6 +57,19 @@ public class MySQLApartmentDAO implements ApartmentDAO {
             preparedStatement.setDate(3, apartmentInOrder.getDateFrom());
             ResultSet resultSet = preparedStatement.executeQuery();
             return parseApartmentList(resultSet);
+        } catch (SQLException e) {
+            LOGGER.error(e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public Apartment getByOrderID(int orderId) {
+        try {
+            PreparedStatement preparedStatement= connection.prepareStatement(SELECT_APARTMENT_FROM_ORDER);
+            preparedStatement.setInt(1, orderId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            return parseApartment(resultSet);
         } catch (SQLException e) {
             LOGGER.error(e);
             throw new RuntimeException(e);

@@ -37,9 +37,6 @@ public class MySQLOrderDAO implements OrderDAO {
     private static final String INSERT_INTO_ORDERS_HAS_APARTMENTS = "INSERT INTO orders_has_apartments " +
             "(orders_id, apartments_id) VALUES (?,?)";
 
-
-
-
     MySQLOrderDAO(Connection connection) {
         this.connection = connection;
     }

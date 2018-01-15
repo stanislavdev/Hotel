@@ -13,7 +13,8 @@
 </head>
 <body>
 <h2>Book apartment</h2>
-<form method="post" action="/hotel/create_order">
+<form method="post" action="/hotel/creating_order">
+    <input type="hidden" name="command" value="create_order">
     <select name="numberOfRooms">
         <option value="1">1</option>
         <option value="2">2</option>
@@ -35,7 +36,8 @@
     <input name="submit" type="submit" value="Confirm">
 </form>
 
-<form action="/hotel/sign_out" method="post">
+<form action="/hotel/home" method="post">
+    <input type="hidden" name="command" value="sign_out">
     <button type="submit">Exit</button>
 </form>
 
@@ -64,10 +66,12 @@
             </tr>
         </c:forEach>
     </table>
-
     <br>
-
 </div>
 
+<form action="/hotel/bills" method="post">
+    <input type="hidden" name="command" value="bills-page">
+    <input type="submit" value="Show my bills">
+</form>
 </body>
 </html>

@@ -59,7 +59,8 @@
     </style>
 </head>
 <body>
-<form method="post" action="/hotel/chose-apartment">
+<form method="post" action="/hotel/apartments-for-order">
+    <input type="hidden" name="command" value="chose_apartment">
     <table id="orders">
         <tr>
             <th>Number of rooms</th>
@@ -90,7 +91,8 @@
     <input class="button button2" type="submit" value="Show"/>
 </form>
 
-<form action="/hotel/sign_out" method="post">
+<form action="/hotel/home" method="post">
+    <input type="hidden" name="command" value="sign_out">
     <button type="submit">Exit</button>
 </form>
 </body>

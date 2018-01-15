@@ -10,4 +10,5 @@ public interface ApartmentService {
     List<Apartment> showAvailableApartments(Order order);
     List<Apartment> getAll();
     Optional<Apartment> getById(int id);
+    Apartment getByOrderId(int orderId);
 }

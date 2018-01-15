@@ -34,4 +34,10 @@ public class ApartmentServiceImpl implements ApartmentService {
         return apartmentDAO.getById(id);
 
     }
+
+    @Override
+    public Apartment getByOrderId(int orderId) {
+        ApartmentDAO apartmentDAO = factoryDAO.getApartmentDAO();
+        return apartmentDAO.getByOrderID(orderId);
+    }
 }

@@ -13,7 +13,8 @@
 </head>
 <body>
 <c:out value="Chose an apartment for ${client.email}"/>
-<form method="post" action="/hotel/create-bill">
+<form method="post" action="/hotel/home">
+    <input type="hidden" name="command" value="create_bill">
     <table>
         <tr>
             <th>Number of rooms</th>

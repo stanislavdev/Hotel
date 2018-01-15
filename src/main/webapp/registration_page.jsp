@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
   User: stanislav
@@ -13,7 +14,8 @@
 <body>
 <h2>Create Your Account</h2>
 
-<form action="/hotel/registration" method="POST">
+<form action="/hotel/sign-in" method="POST">
+    <input type="hidden" name="command" value="registration">
     Email:<input name="emailRegistration" type="email">
     Password:<input name="passwordRegistration" type="password">
     <button type="submit">Continue</button>
