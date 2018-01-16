@@ -1,54 +1,62 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%--
-  Created by IntelliJ IDEA.
-  User: stanislav
-  Date: 03.01.18
-  Time: 22:17
-  To change this template use File | Settings | File Templates.
---%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<fmt:setLocale value="${sessionScope.locale}" scope="session"/>
+<fmt:setBundle basename="message" var="msg"/>
 <html>
 <head>
-    <title>Title</title>
+    <title><fmt:message bundle="${msg}" key="home.title"/></title>
 </head>
 <body>
-<h2>Book apartment</h2>
+<h2><fmt:message bundle="${msg}" key="client.booking-label"/></h2>
 <form method="post" action="/hotel/creating_order">
     <input type="hidden" name="command" value="create_order">
-    <select name="numberOfRooms">
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5+">5+</option>
-    </select>
+    <label><fmt:message bundle="${msg}" key="client.number-of-rooms"/>
+        <select name="numberOfRooms">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5+">5+</option>
+        </select>
+    </label>
 
-    <select name="apartmentType">
-        <option value="standart">Standard</option>
-        <option value="business">Business</option>
-        <option value="deluxe">Deluxe</option>
-        <option value="president">President</option>
-    </select>
+    <label><fmt:message bundle="${msg}" key="client.apartment-type"/>
+        <select name="apartmentType">
+            <option value="standart">
+                <fmt:message bundle="${msg}" key="client.apartment-type.standard"/>
+            </option>
+            <option value="business">
+                <fmt:message bundle="${msg}" key="client.apartment-type.business"/>
+            </option>
+            <option value="deluxe">
+                <fmt:message bundle="${msg}" key="client.apartment-type.deluxe"/>
+            </option>
+            <option value="president">
+                <fmt:message bundle="${msg}" key="client.apartment-type.president"/>
+            </option>
+        </select>
+    </label>
 
     <input name="dateFrom" type="date"/>
     <input name="dateTo" type="date"/>
 
-    <input name="submit" type="submit" value="Confirm">
+    <button name="submit" type="submit"><fmt:message bundle="${msg}" key="client.confirm-button"/></button>
 </form>
 
 <form action="/hotel/home" method="post">
     <input type="hidden" name="command" value="sign_out">
-    <button type="submit">Exit</button>
+    <button type="submit"><fmt:message bundle="${msg}" key="client.exit-button"/></button>
 </form>
 
 <div>
-    <h2>History</h2>
+    <h2><fmt:message bundle="${msg}" key="client.history"/></h2>
     <hr>
     <table>
         <tr>
-            <th>Number of rooms</th>
-            <th>Apartment type</th>
-            <th>Status</th>
+            <th><fmt:message bundle="${msg}" key="client.number-of-rooms"/></th>
+            <th><fmt:message bundle="${msg}" key="client.apartment-type"/></th>
+            <th><fmt:message bundle="${msg}" key="client.order-status"/></th>
         </tr>
         <c:forEach items="${sessionScope.orders}" var="item">
             <tr>
@@ -71,7 +79,7 @@
 
 <form action="/hotel/bills" method="post">
     <input type="hidden" name="command" value="bills-page">
-    <input type="submit" value="Show my bills">
+    <button type="submit"><fmt:message bundle="${msg}" key="client.show-bills-button"/></button>
 </form>
 </body>
 </html>

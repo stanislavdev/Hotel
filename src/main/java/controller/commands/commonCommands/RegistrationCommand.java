@@ -17,12 +17,10 @@ public class RegistrationCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
-//        AccountService accountService = AccountServiceImpl.getInstance();
         AccountService accountService = new AccountServiceImpl();
         String email = request.getParameter(EMAIL_ATTRIBUTE);
         String password = request.getParameter(PASSWORD_ATTRIBUTE);
         User user = new User.UserBuilder()
-                .id(0)
                 .email(email)
                 .password(password)
                 .role(Role.CLIENT.name())

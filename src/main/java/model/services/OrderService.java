@@ -12,6 +12,7 @@ public interface OrderService {
     void createOrder(User user, Date dateFrom, Date dateTo, ApartmentType apartmentType, int numberOfRooms);
     List<Order> showUserOrders(User user);
     List<Order> getAllOrders();
+    List<Order> getAllLimitedOrders(int start, int total);
     Optional<Order> getById(int id);
     void updateToAccepted(Order order);
     void insertIntoOrderHasApartments(int orderId, int apartmentId);

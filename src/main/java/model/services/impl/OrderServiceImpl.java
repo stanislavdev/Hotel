@@ -47,6 +47,12 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public List<Order> getAllLimitedOrders(int start, int total) {
+        OrderDAO orderDAO = factoryDAO.getOrderDAO();
+        return  orderDAO.getAllLimit(start, total);
+    }
+
+    @Override
     public Optional<Order> getById(int id) {
         OrderDAO  orderDAO= factoryDAO.getOrderDAO();
         return orderDAO.getById(id);

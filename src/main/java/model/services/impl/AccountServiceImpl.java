@@ -3,6 +3,7 @@ package model.services.impl;
 import model.dao.UserDAO;
 import model.dao.impl.MySQLFactoryDAO;
 import model.entities.User;
+import model.exeptions.EmailExistException;
 import model.services.AccountService;
 
 import java.sql.Connection;
@@ -11,14 +12,6 @@ import java.util.Optional;
 
 public class AccountServiceImpl implements AccountService {
     private MySQLFactoryDAO factoryDAO;
-
-//    private static class AccountServiceImplHolder {
-//        private static final AccountServiceImpl INSTANCE = new AccountServiceImpl();
-//    }
-//
-//    public static AccountServiceImpl getInstance() {
-//        return AccountServiceImplHolder.INSTANCE;
-//    }
 
     public AccountServiceImpl() {
         factoryDAO = new MySQLFactoryDAO();
@@ -37,7 +30,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public void signUp(User user) throws SQLException {
+    public void signUp(User user) throws EmailExistException, SQLException {
         try (Connection connection = factoryDAO.getConnection()) {
             connection.setAutoCommit(false);
             UserDAO userDAO = factoryDAO.getUserDAO();

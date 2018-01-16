@@ -87,6 +87,9 @@
             </tr>
         </c:forEach>
     </table>
+    <c:forEach begin="1" end="${requestScope.countOfOrders}" varStatus="loop">
+        <a href="/hotel/home/?page=${loop.index}">${loop.index}</a>
+    </c:forEach>
     <br>
     <input class="button button2" type="submit" value="Show"/>
 </form>

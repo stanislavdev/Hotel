@@ -1,10 +1,7 @@
 package controller.filters;
 
-
-import controller.commands.Command;
 import model.entities.Role;
 import model.entities.User;
-import model.util.Pages;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
@@ -30,6 +27,7 @@ public class RequestLoginFilter implements Filter {
         commonCommands.add(REGISTRATION);
         commonCommands.add(SIGN_IN);
         commonCommands.add(REGISTRATION_PAGE);
+        commonCommands.add(CHANGE_LOCALE);
 
         clientCommands.add(CLIENT_HOME_PAGE);
         clientCommands.add(CLIENT_BILLS_PAGE);
@@ -46,13 +44,15 @@ public class RequestLoginFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         String command = String.valueOf(request.getParameter("command"));
-        String uri = request.getRequestURI();
-        System.out.println(uri);
+        String url = String.valueOf(request.getRequestURL());
+        String page = request.getParameter("page");
         User user = (User) request.getSession().getAttribute("user");
+
+        boolean isPage = (page!=null);
 
         boolean isGuest = (user == null) && commonCommands.contains(command);
         boolean isAdmin = (user != null) && user.getRole().equals(Role.ADMIN) &&
-                adminCommands.contains(command);
+                adminCommands.contains(command) || adminCommands.contains(url);
         boolean isClient = (user != null) && user.getRole().equals(Role.CLIENT) &&
                 clientCommands.contains(command);
 
@@ -64,7 +64,7 @@ public class RequestLoginFilter implements Filter {
             request.setAttribute("command", command);
         }
 
-        if (isSignedIn) {
+        if (isSignedIn || isPage) {
             if (user.getRole() == Role.ADMIN) {
                 request.setAttribute("command", ADMIN_HOME_PAGE);
             } else {

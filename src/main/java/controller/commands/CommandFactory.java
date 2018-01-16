@@ -21,6 +21,7 @@ public class CommandFactory {
     public static final String CHOSE_APARTMENT_BY_ADMIN = "chose_apartment";
     public static final String SEND_BILL_TO_CLIENT = "create_bill";
     public static final String CLIENT_BILLS_PAGE = "bills-page";
+    public static final String CHANGE_LOCALE = "change-locale";
 
     public static Command createCommand(String command) {
 
@@ -31,6 +32,8 @@ public class CommandFactory {
         switch (command) {
             case SIGN_IN:
                 return new SignInCommand();
+            case CHANGE_LOCALE:
+                return new LocaleCommand();
             case LOGIN_PAGE:
                 return new LoginPageCommand();
             case REGISTRATION_PAGE:
