@@ -1,12 +1,11 @@
 package controller.commands.adminCommands;
 
 import controller.commands.Command;
-import controller.commands.CommandFactory;
 import model.entities.Order;
 import model.entities.User;
-import model.services.AccountService;
+import model.services.UserService;
 import model.services.OrderService;
-import model.services.impl.AccountServiceImpl;
+import model.services.impl.UserServiceImpl;
 import model.services.impl.OrderServiceImpl;
 
 import javax.servlet.http.HttpServletRequest;
@@ -45,9 +44,9 @@ public class AdminHomePageCommand implements Command {
         }
 
         List<Order> orders = orderService.getAllLimitedOrders(pageId, total);
-        AccountService accountService = new AccountServiceImpl();
+        UserService userService = new UserServiceImpl();
         for (Order order : orders) {
-            order.setClient((User) accountService.getById(order.getClientId()).get());
+            order.setClient((User) userService.getById(order.getClientId()).get());
         }
         request.getSession().setAttribute("orders", orders);
         return ADMIN_HOME_JSP;

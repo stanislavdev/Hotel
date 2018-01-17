@@ -20,7 +20,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void createOrder(User user, Date dateFrom, Date dateTo, ApartmentType apartmentType, int numberOfRooms) {
+    public void createOrder(int userId, Date dateFrom, Date dateTo, ApartmentType apartmentType, int numberOfRooms) {
         OrderDAO orderDAO = factoryDAO.getOrderDAO();
         Order order = new Order.OrderBuilder()
                 .id(0)
@@ -29,15 +29,15 @@ public class OrderServiceImpl implements OrderService {
                 .apartmentType(apartmentType.name())
                 .accepted(0)
                 .numberOfRooms(numberOfRooms)
-                .client(user)
+                .clintId(userId)
                 .build();
         orderDAO.insert(order);
     }
 
     @Override
-    public List<Order> showUserOrders(User user) {
+    public List<Order> getAllUserOrders(int userId) {
         OrderDAO orderDAO = factoryDAO.getOrderDAO();
-        return orderDAO.findByUser(user);
+        return orderDAO.findByUser(userId);
     }
 
     @Override

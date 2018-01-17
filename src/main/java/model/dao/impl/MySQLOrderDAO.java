@@ -27,7 +27,7 @@ public class MySQLOrderDAO implements OrderDAO {
     private static final String CLIENT_ID = "orders.client_id";
 
     private static final String INSERT_ORDER = "INSERT INTO orders " +
-            "(numberOfRooms, dateFrom, dateTo, accepted, apartmentType,client_id ) " +
+            "(numberOfRooms, dateFrom, dateTo, accepted, apartmentType,client_id) " +
             "VALUES (?,?,?,?,?,?)";
     private static final String SELECT_ORDER_BY_USER = "SELECT * FROM orders " +
             "WHERE orders.client_id = ?";
@@ -45,10 +45,10 @@ public class MySQLOrderDAO implements OrderDAO {
     }
 
     @Override
-    public List<Order> findByUser(User user) {
+    public List<Order> findByUser(int userId) {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ORDER_BY_USER);
-            preparedStatement.setInt(1, user.getId());
+            preparedStatement.setInt(1, userId);
             ResultSet resultSet = preparedStatement.executeQuery();
             return parseOrderList(resultSet);
         } catch (SQLException e) {
@@ -123,7 +123,7 @@ public class MySQLOrderDAO implements OrderDAO {
             preparedStatement.setDate(3, object.getDateTo());
             preparedStatement.setInt(4, object.getAccepted());
             preparedStatement.setString(5, String.valueOf(object.getApartmentType()));
-            preparedStatement.setInt(6, object.getClient().getId());
+            preparedStatement.setInt(6, object.getClientId());
             return preparedStatement.executeUpdate() > 0;
         } catch (SQLException e) {
             LOGGER.error(e);

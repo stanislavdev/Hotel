@@ -3,6 +3,8 @@ package model.dao;
 
 import model.dao.impl.MySQLFactoryDAO;
 
+import java.sql.Connection;
+
 public abstract class FactoryDAO {
     private static FactoryDAO FACTORY_DAO_INSTANCE;
 
@@ -13,6 +15,8 @@ public abstract class FactoryDAO {
     public abstract OrderDAO getOrderDAO();
 
     public abstract BillDAO getBillDAO();
+
+    public abstract Connection getConnection();
 
     public static FactoryDAO getInstance() {
         if (FACTORY_DAO_INSTANCE == null) {

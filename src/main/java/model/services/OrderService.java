@@ -9,8 +9,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface OrderService {
-    void createOrder(User user, Date dateFrom, Date dateTo, ApartmentType apartmentType, int numberOfRooms);
-    List<Order> showUserOrders(User user);
+    void createOrder(int userId, Date dateFrom, Date dateTo, ApartmentType apartmentType, int numberOfRooms);
+    List<Order> getAllUserOrders(int userId);
     List<Order> getAllOrders();
     List<Order> getAllLimitedOrders(int start, int total);
     Optional<Order> getById(int id);

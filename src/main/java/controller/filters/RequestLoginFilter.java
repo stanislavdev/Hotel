@@ -2,6 +2,8 @@ package controller.filters;
 
 import model.entities.Role;
 import model.entities.User;
+import model.services.UserService;
+import model.services.impl.UserServiceImpl;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
@@ -10,6 +12,7 @@ import java.io.IOException;
 import java.util.*;
 
 import static controller.commands.CommandFactory.*;
+import static model.util.Constants.USER_ID_ATTRIBUTE;
 
 @WebFilter("/hotel/*")
 public class RequestLoginFilter implements Filter {
@@ -43,21 +46,22 @@ public class RequestLoginFilter implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
+        UserService userService = new UserServiceImpl();
         String command = String.valueOf(request.getParameter("command"));
         String url = String.valueOf(request.getRequestURL());
         String page = request.getParameter("page");
-        User user = (User) request.getSession().getAttribute("user");
+        Optional<User> user = userService.getUserFromSessionById(request);
 
-        boolean isPage = (page!=null);
+        boolean isPage = (page != null);
 
-        boolean isGuest = (user == null) && commonCommands.contains(command);
-        boolean isAdmin = (user != null) && user.getRole().equals(Role.ADMIN) &&
+        boolean isGuest = (!user.isPresent()) && commonCommands.contains(command);
+        boolean isAdmin = (user.isPresent()) && user.get().getRole().equals(Role.ADMIN) &&
                 adminCommands.contains(command) || adminCommands.contains(url);
-        boolean isClient = (user != null) && user.getRole().equals(Role.CLIENT) &&
+        boolean isClient = (user.isPresent()) && user.get().getRole().equals(Role.CLIENT) &&
                 clientCommands.contains(command);
 
-        boolean isSignedIn = (user != null) && commonCommands.contains(command);
-        boolean needToSignIn = (user == null) &&
+        boolean isSignedIn = (user.isPresent()) && commonCommands.contains(command);
+        boolean needToSignIn = (!user.isPresent()) &&
                 (clientCommands.contains(command) || adminCommands.contains(command));
 
         if (isAdmin || isClient || isGuest) {
@@ -65,7 +69,7 @@ public class RequestLoginFilter implements Filter {
         }
 
         if (isSignedIn || isPage) {
-            if (user.getRole() == Role.ADMIN) {
+            if (user.get().getRole() == Role.ADMIN) {
                 request.setAttribute("command", ADMIN_HOME_PAGE);
             } else {
                 request.setAttribute("command", CLIENT_HOME_PAGE);

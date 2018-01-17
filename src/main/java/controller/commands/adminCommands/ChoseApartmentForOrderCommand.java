@@ -1,14 +1,13 @@
 package controller.commands.adminCommands;
 
 import controller.commands.Command;
-import controller.commands.CommandFactory;
 import model.entities.Apartment;
 import model.entities.Order;
 import model.entities.User;
-import model.services.AccountService;
+import model.services.UserService;
 import model.services.ApartmentService;
 import model.services.OrderService;
-import model.services.impl.AccountServiceImpl;
+import model.services.impl.UserServiceImpl;
 import model.services.impl.ApartmentServiceImpl;
 import model.services.impl.OrderServiceImpl;
 
@@ -28,8 +27,8 @@ public class ChoseApartmentForOrderCommand implements Command {
         List<Apartment> apartmentList = apartmentService.showAvailableApartments(order.get());
         request.getSession().setAttribute("apartments", apartmentList);
 
-        AccountService accountService = new AccountServiceImpl();
-        User user = accountService.getById(order.get().getClientId()).get();
+        UserService userService = new UserServiceImpl();
+        User user = userService.getById(order.get().getClientId()).get();
         request.setAttribute("client", user);
         return APARTMENTS_FOR_ORDER;
     }
