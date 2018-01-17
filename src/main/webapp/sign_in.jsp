@@ -22,7 +22,6 @@
                     <input type="email" name="email" class="inputText"/>
                 </label>
             </span>
-            <br>
             <span class="border">
                 <label><fmt:message bundle="${msg}" key="password.input"/>
                     <input type="password" name="password" class="inputText">
