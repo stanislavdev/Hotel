@@ -21,12 +21,13 @@ public class SignInCommand implements Command {
 
     private static final Logger LOGGER = Logger.getLogger(SignInCommand.class);
 
+    private UserService userService = UserServiceImpl.getInstance();
+
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
         String email = request.getParameter(EMAIL);
         String password = request.getParameter(PASSWORD);
-        UserService userService = new UserServiceImpl();
         Optional<User> user = userService.signIn(email, password);
         if (user.isPresent()) {
             request.getSession().setAttribute(USER_ATTRIBUTE, user.get().getId());

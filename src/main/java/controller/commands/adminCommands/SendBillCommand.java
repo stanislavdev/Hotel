@@ -15,6 +15,7 @@ import model.services.impl.OrderServiceImpl;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.sql.Date;
+import java.sql.SQLException;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
@@ -38,7 +39,12 @@ public class SendBillCommand implements Command {
                 .price(price)
                 .build();
         orderService.updateToAccepted(order.get());
-        orderService.insertIntoOrderHasApartments(Integer.parseInt(orderId), Integer.parseInt(apartmentId));
+        try {
+            orderService.insertIntoOrderHasApartments(Integer.parseInt(orderId), Integer.parseInt(apartmentId));
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
         billService.createNewBill(bill);
         return "redirect:" + CommandFactory.ADMIN_HOME_PAGE;
     }

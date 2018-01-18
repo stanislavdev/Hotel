@@ -53,7 +53,7 @@ public class MySQLApartmentDAO implements ApartmentDAO {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_AVAILABLE_APARTMENTS);
             preparedStatement.setString(1, String.valueOf(apartmentInOrder.getApartmentType()));
-            preparedStatement.setInt(2, apartmentInOrder.getNumberOfRooms());
+            preparedStatement.setString(2, apartmentInOrder.getNumberOfRooms());
             preparedStatement.setDate(3, apartmentInOrder.getDateFrom());
             ResultSet resultSet = preparedStatement.executeQuery();
             return parseApartmentList(resultSet);

@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Order {
     private int id;
-    private int numberOfRooms;
+    private String numberOfRooms;
     private ApartmentType apartmentType;
     private Date dateFrom;
     private Date dateTo;
@@ -35,11 +35,11 @@ public class Order {
         this.id = id;
     }
 
-    public int getNumberOfRooms() {
+    public String getNumberOfRooms() {
         return numberOfRooms;
     }
 
-    public void setNumberOfRooms(int numberOfRooms) {
+    public void setNumberOfRooms(String numberOfRooms) {
         this.numberOfRooms = numberOfRooms;
     }
 
@@ -117,7 +117,7 @@ public class Order {
 
     public static class OrderBuilder{
         private int id;
-        private int numberOfRooms;
+        private String numberOfRooms;
         private ApartmentType apartmentType;
         private Date dateFrom;
         private Date dateTo;
@@ -131,7 +131,7 @@ public class Order {
             return this;
         }
 
-        public OrderBuilder numberOfRooms(int numberOfRooms){
+        public OrderBuilder numberOfRooms(String numberOfRooms){
             this.numberOfRooms = numberOfRooms;
             return this;
         }

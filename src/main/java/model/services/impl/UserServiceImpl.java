@@ -21,6 +21,14 @@ public class UserServiceImpl implements UserService {
         factoryDAO = FactoryDAO.getInstance();
     }
 
+    private static class Holder {
+        private static UserServiceImpl INSTANCE = new UserServiceImpl();
+    }
+
+    public static UserServiceImpl getInstance() {
+        return Holder.INSTANCE;
+    }
+
     @Override
     public Optional<User> signIn(String email, String password) {
         UserDAO userDAO = factoryDAO.getUserDAO();
@@ -36,7 +44,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public Optional<User> getById(int id) {
         UserDAO userDAO = factoryDAO.getUserDAO();
-        return userDAO.getById(id);
+        Optional<User> user = userDAO.getById(id);
+        userDAO.close();
+        return user;
     }
 
     @Override

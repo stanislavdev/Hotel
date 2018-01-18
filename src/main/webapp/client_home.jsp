@@ -11,7 +11,7 @@
 <body>
 <div class="card-panel">
    <span class="blue-text text-darken-2">
-       <h4><fmt:message bundle="${msg}" key="client.booking-label"/></h4>
+       <h5><fmt:message bundle="${msg}" key="client.booking-label"/></h5>
    </span>
     <form action="/hotel/home" method="post">
         <input type="hidden" name="command" value="sign_out">
@@ -23,57 +23,66 @@
 <br>
 
 <div class="container">
-    <form method="post" action="/hotel/creating_order">
-        <input type="hidden" name="command" value="create_order">
-        <div class="row">
-            <div class="col s3">
-                <label for="selectNumber">
-                    <fmt:message bundle="${msg}" key="client.number-of-rooms"/>
-                </label>
-                <select class="browser-default" id="selectNumber" name="numberOfRooms">
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5+">5+</option>
-                </select>
+    <div class="card-panel hoverable">
+        <form method="post" action="/hotel/creating_order">
+            <input type="hidden" name="command" value="create_order">
+            <div class="row">
+                <div class="col s3">
+                    <label for="selectNumber">
+                        <fmt:message bundle="${msg}" key="client.number-of-rooms"/>
+                    </label>
+                    <select class="browser-default" id="selectNumber" name="numberOfRooms">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5+">5+</option>
+                    </select>
+                </div>
+                <div class="col s3">
+                    <label for="selectType">
+                        <fmt:message bundle="${msg}" key="client.apartment-type"/>
+                    </label>
+                    <select class="browser-default" id="selectType" name="apartmentType">
+                        <option value="standart">
+                            <fmt:message bundle="${msg}" key="client.apartment-type.standard"/>
+                        </option>
+                        <option value="business">
+                            <fmt:message bundle="${msg}" key="client.apartment-type.business"/>
+                        </option>
+                        <option value="deluxe">
+                            <fmt:message bundle="${msg}" key="client.apartment-type.deluxe"/>
+                        </option>
+                        <option value="president">
+                            <fmt:message bundle="${msg}" key="client.apartment-type.president"/>
+                        </option>
+                    </select>
+                </div>
+                <div class="col s3">
+                    <input name="dateFrom" type="date"/>
+                </div>
+                <div class="col s3">
+                    <input name="dateTo" type="date"/>
+                </div>
             </div>
-            <div class="col s3">
-                <label for="selectType">
-                    <fmt:message bundle="${msg}" key="client.apartment-type"/>
-                </label>
-                <select class="browser-default" id="selectType" name="apartmentType">
-                    <option value="standart">
-                        <fmt:message bundle="${msg}" key="client.apartment-type.standard"/>
-                    </option>
-                    <option value="business">
-                        <fmt:message bundle="${msg}" key="client.apartment-type.business"/>
-                    </option>
-                    <option value="deluxe">
-                        <fmt:message bundle="${msg}" key="client.apartment-type.deluxe"/>
-                    </option>
-                    <option value="president">
-                        <fmt:message bundle="${msg}" key="client.apartment-type.president"/>
-                    </option>
-                </select>
+            <div class="row">
+                <div class="col s4">
+                    <button class="btn waves-effect waves-light blue darken-2" type="submit" name="action">
+                        <fmt:message bundle="${msg}" key="client.confirm-button"/>
+                    </button>
+                </div>
+                <div class="col s8">
+                    <c:if test="${requestScope.exception != null}">
+                        <h6 class="left">
+                            <span class="flow-text red-text">
+                                 <fmt:message bundle="${msg}" key="client.wrong-date.exception"/>
+                             </span>
+                        </h6>
+                    </c:if>
+                </div>
             </div>
-            <div class="col s3">
-                <input name="dateFrom" type="date"/>
-            </div>
-            <div class="col s3">
-                <input name="dateTo" type="date"/>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col s4">
-                <button class="btn waves-effect waves-light blue darken-2" type="submit" name="action">
-                    <fmt:message bundle="${msg}" key="client.confirm-button"/>
-                </button>
-            </div>
-        </div>
-    </form>
-
-
+        </form>
+    </div>
     <div>
         <h3><fmt:message bundle="${msg}" key="client.history"/></h3>
         <table class="bordered">
@@ -98,6 +107,22 @@
                 </tr>
             </c:forEach>
         </table>
+        <ul class="pagination">
+        <c:forEach begin="1" end="${requestScope.countOfOrders}" varStatus="loop">
+            <c:choose>
+                <c:when test="${sessionScope.page eq loop.index}">
+                    <li class="active">
+                        <a href="/hotel/home/?page=${loop.index}">${loop.index}</a>
+                    </li>
+                </c:when>
+                <c:otherwise>
+                    <li class="waves-effect">
+                        <a href="/hotel/home/?page=${loop.index}">${loop.index}</a>
+                    </li>
+                </c:otherwise>
+            </c:choose>
+        </c:forEach>
+        </ul>
         <br>
     </div>
 

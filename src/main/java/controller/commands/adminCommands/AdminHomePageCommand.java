@@ -23,8 +23,7 @@ public class AdminHomePageCommand implements Command {
             pageId = Integer.parseInt(sPage);
         }
         int total = 3;
-        if (pageId == 1) {
-        } else {
+        if (pageId != 1) {
             pageId = pageId - 1;
             pageId = pageId * total + 1;
         }

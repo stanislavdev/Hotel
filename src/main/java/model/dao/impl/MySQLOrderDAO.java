@@ -39,7 +39,6 @@ public class MySQLOrderDAO implements OrderDAO {
             "(orders_id, apartments_id) VALUES (?,?)";
 
 
-
     MySQLOrderDAO(Connection connection) {
         this.connection = connection;
     }
@@ -72,12 +71,12 @@ public class MySQLOrderDAO implements OrderDAO {
     }
 
     @Override
-    public void insertIntoOrdersHasApartments(int orderId, int apartmentId) {
+    public boolean insertIntoOrdersHasApartments(int orderId, int apartmentId) {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_INTO_ORDERS_HAS_APARTMENTS);
             preparedStatement.setInt(1, orderId);
             preparedStatement.setInt(2, apartmentId);
-            preparedStatement.executeUpdate();
+            return preparedStatement.executeUpdate() > 0;
         } catch (SQLException e) {
             LOGGER.error(e);
             throw new RuntimeException(e);
@@ -103,7 +102,7 @@ public class MySQLOrderDAO implements OrderDAO {
             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BY_ID);
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()){
+            if (resultSet.next()) {
                 return Optional.of(parseOrder(resultSet));
             } else {
                 return Optional.empty();
@@ -118,7 +117,7 @@ public class MySQLOrderDAO implements OrderDAO {
     public boolean insert(Order object) {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_ORDER);
-            preparedStatement.setInt(1, object.getNumberOfRooms());
+            preparedStatement.setString(1, object.getNumberOfRooms());
             preparedStatement.setDate(2, object.getDateFrom());
             preparedStatement.setDate(3, object.getDateTo());
             preparedStatement.setInt(4, object.getAccepted());
@@ -156,7 +155,7 @@ public class MySQLOrderDAO implements OrderDAO {
         try {
             return new Order.OrderBuilder()
                     .id(resultSet.getInt(ID))
-                    .numberOfRooms(resultSet.getInt(NUMBER_OF_ROOMS))
+                    .numberOfRooms(resultSet.getString(NUMBER_OF_ROOMS))
                     .dateFrom(resultSet.getDate(DATE_FROM))
                     .dateTo(resultSet.getDate(DATE_TO))
                     .accepted(resultSet.getInt(ACCEPTED))
