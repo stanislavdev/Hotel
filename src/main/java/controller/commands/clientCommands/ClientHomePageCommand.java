@@ -21,37 +21,35 @@ public class ClientHomePageCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
-        String userId = String.valueOf(request.getSession().getAttribute(USER_ID_ATTRIBUTE));
         pagination(request, 3);
-
         return CLIENT_HOME_JSP;
     }
 
     private void pagination(HttpServletRequest request, int total) {
         String sPage = request.getParameter("page");
+        int pageId;
+        int size = 0;
         if (sPage != null){
             request.getSession().setAttribute("page", sPage);
+            pageId = Integer.parseInt(sPage);
         } else {
             request.getSession().setAttribute("page", 1);
-        }
-        int pageId;
-        if (sPage == null) {
             pageId = 1;
-        } else {
-            pageId = Integer.parseInt(sPage);
         }
-//        int total = 3;
+
+
         if (pageId != 1) {
             pageId = (pageId - 1) * total + 1;
         }
 
-        int size = 0;
+
         List<Order> ordersForCount = orderService.getAllOrders();
         for (Order order : ordersForCount) {
             if (order.getAccepted() == 0) {
                 size++;
             }
         }
+
         if (size % total == 0) {
             request.setAttribute("countOfOrders", (size / total));
         } else {

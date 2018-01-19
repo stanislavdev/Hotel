@@ -36,6 +36,7 @@ public class RequestLoginFilter implements Filter {
         clientCommands.add(CLIENT_BILLS_PAGE);
         clientCommands.add(SIGN_OUT);
         clientCommands.add(CREATE_ORDER);
+        clientCommands.add(BILL_PAYMENT);
 
         adminCommands.add(ADMIN_HOME_PAGE);
         adminCommands.add(SIGN_OUT);

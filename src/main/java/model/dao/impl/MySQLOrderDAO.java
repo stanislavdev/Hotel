@@ -32,7 +32,7 @@ public class MySQLOrderDAO implements OrderDAO {
     private static final String SELECT_ORDER_BY_USER = "SELECT * FROM orders " +
             "WHERE orders.client_id = ?";
     private static final String SELECT_ALL_ORDERS = "SELECT * FROM orders";
-    private static final String SELECT_ALL_LIMIT_ORDERS = "SELECT * FROM orders LIMIT ?,?";
+    private static final String SELECT_ALL_LIMIT_ORDERS = "SELECT * FROM orders WHERE orders.accepted = 0 LIMIT ?,?";
     private static final String SELECT_BY_ID = "SELECT * FROM orders WHERE orders.id = ?";
     private static final String UPDATE_TO_ACCEPTED = "UPDATE orders SET orders.accepted = 1 WHERE orders.id = ?";
     private static final String INSERT_INTO_ORDERS_HAS_APARTMENTS = "INSERT INTO orders_has_apartments " +
@@ -60,7 +60,7 @@ public class MySQLOrderDAO implements OrderDAO {
     public List<Order> getAllLimit(int start, int total) {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_LIMIT_ORDERS);
-            preparedStatement.setInt(1, start);
+            preparedStatement.setInt(1, start-1);
             preparedStatement.setInt(2, total);
             ResultSet resultSet = preparedStatement.executeQuery();
             return parseOrderList(resultSet);

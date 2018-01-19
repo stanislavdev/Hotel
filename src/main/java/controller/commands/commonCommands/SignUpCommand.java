@@ -16,15 +16,16 @@ import java.sql.SQLException;
 
 import static model.util.Constants.*;
 
-public class RegistrationCommand implements Command {
+public class SignUpCommand implements Command {
 
-    private static Logger LOGGER = Logger.getLogger(RegistrationCommand.class);
+    private UserService userService = UserServiceImpl.getInstance();
+
+    private static Logger LOGGER = Logger.getLogger(SignUpCommand.class);
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
         String email = request.getParameter(EMAIL_ATTRIBUTE);
         String password = request.getParameter(PASSWORD_ATTRIBUTE);
-        UserService userService = new UserServiceImpl();
         User user = new User.UserBuilder()
                 .email(email)
                 .password(password)
@@ -43,7 +44,7 @@ public class RegistrationCommand implements Command {
     }
 
     private void validate(User user) throws WrongInputEmailException, WrongPasswordException {
-        if (!user.getEmail().matches(EMAIL_REGEX))
+        if (!user.getEmail().matches(EMAIL_REGEX) || userService.getUserByEmail(user.getEmail()).isPresent())
             throw new WrongInputEmailException();
         if (!user.getPassword().matches(PASSWORD_REGEX))
             throw new WrongPasswordException();

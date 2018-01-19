@@ -18,16 +18,16 @@ import java.util.Optional;
 public class OrderServiceImpl implements OrderService {
     private FactoryDAO factoryDAO;
 
-    public OrderServiceImpl() {
-        factoryDAO = FactoryDAO.getInstance();
-    }
-
     private static class Holder {
         private static OrderServiceImpl INSTANCE = new OrderServiceImpl();
     }
 
     public static OrderServiceImpl getInstance() {
         return Holder.INSTANCE;
+    }
+
+    public OrderServiceImpl() {
+        factoryDAO = FactoryDAO.getInstance();
     }
 
     @Override

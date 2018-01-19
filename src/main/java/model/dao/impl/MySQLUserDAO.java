@@ -26,7 +26,7 @@ public class MySQLUserDAO implements UserDAO {
     private static String INSERT_USER = "INSERT INTO users (email, password, role) VALUES (?, ?, ?)";
     private static String UPDATE_USER = "UPDATE users SET password = ? WHERE id = ?";
     private static String SELECT_USER_BY_EMAIL_AND_PASSWORD = "SELECT * FROM users WHERE email = ? AND password = ?";
-
+    private static String SELECT_USER_BY_EMAIL = "SELECT * FROM users WHERE email = ?";
     private static final Logger LOGGER = Logger.getLogger(MySQLUserDAO.class);
 
     MySQLUserDAO(Connection connection) {
@@ -39,6 +39,23 @@ public class MySQLUserDAO implements UserDAO {
             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_USER_BY_EMAIL_AND_PASSWORD);
             preparedStatement.setString(1, email);
             preparedStatement.setString(2, password);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return Optional.of(parseUser(resultSet));
+            } else {
+                return Optional.empty();
+            }
+        } catch (SQLException e) {
+            LOGGER.error(e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public Optional<User> getUserByEmail(String email) {
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_USER_BY_EMAIL);
+            preparedStatement.setString(1, email);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 return Optional.of(parseUser(resultSet));

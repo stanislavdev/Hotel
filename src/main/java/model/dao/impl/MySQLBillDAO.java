@@ -29,6 +29,7 @@ public class MySQLBillDAO implements BillDAO {
     private static final String SELECT_BILLS_FOR_CLIENT = "SELECT * FROM bills JOIN orders " +
             "ON bills.order_id = orders.id " +
             "JOIN users ON orders.client_id = users.id WHERE client_id = ?";
+    private static final String UPDATE_TO_PAID = "UPDATE bills SET isPaid = 1 WHERE id = ?";
 
     MySQLBillDAO(Connection connection) {
         this.connection = connection;
@@ -55,10 +56,10 @@ public class MySQLBillDAO implements BillDAO {
     public boolean insert(Bill object) {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(INSERT);
-            preparedStatement.setInt(1,object.getAdmin().getId());
-            preparedStatement.setInt(2,object.getOrder().getId());
-            preparedStatement.setInt(3,object.getIsPaid());
-            preparedStatement.setInt(4,object.getPrice());
+            preparedStatement.setInt(1, object.getAdmin().getId());
+            preparedStatement.setInt(2, object.getOrder().getId());
+            preparedStatement.setInt(3, object.getIsPaid());
+            preparedStatement.setInt(4, object.getPrice());
             return preparedStatement.executeUpdate() > 0;
         } catch (SQLException e) {
             LOGGER.error(e);
@@ -74,6 +75,18 @@ public class MySQLBillDAO implements BillDAO {
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
             return parseBillList(resultSet);
+        } catch (SQLException e) {
+            LOGGER.error(e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public boolean updateBillToPaid(int id) {
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_TO_PAID);
+            preparedStatement.setInt(1, id);
+            return preparedStatement.executeUpdate() > 0;
         } catch (SQLException e) {
             LOGGER.error(e);
             throw new RuntimeException(e);

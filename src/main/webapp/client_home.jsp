@@ -83,53 +83,54 @@
             </div>
         </form>
     </div>
+    <div class="row">
+        <div class="col s6">
+            <form action="/hotel/bills" method="post">
+                <input type="hidden" name="command" value="bills-page">
+
+                <button class="btn waves-effect waves-light blue darken-2" type="submit">
+                    <fmt:message bundle="${msg}" key="client.show-bills-button"/>
+                </button>
+            </form>
+        </div>
+    </div>
+
     <div>
-        <h3><fmt:message bundle="${msg}" key="client.history"/></h3>
+        <h4><fmt:message bundle="${msg}" key="client.orders.in-progress"/></h4>
         <table class="bordered">
             <tr>
                 <th><fmt:message bundle="${msg}" key="client.number-of-rooms"/></th>
                 <th><fmt:message bundle="${msg}" key="client.apartment-type"/></th>
-                <th><fmt:message bundle="${msg}" key="client.order-status"/></th>
+                <th><fmt:message bundle="${msg}" key="client.orders-in-progress.dateFrom"/></th>
+                <th><fmt:message bundle="${msg}" key="client.orders-in-progress.dateTo"/></th>
             </tr>
             <c:forEach items="${sessionScope.orders}" var="item">
                 <tr>
                     <td><c:out value="${item.numberOfRooms}"/></td>
                     <td><c:out value="${item.apartmentType}"/></td>
-                    <td><c:choose>
-                        <c:when test="${item.accepted == 1}">
-                            <c:out value="accepted"></c:out>
-                        </c:when>
-                        <c:otherwise>
-                            <c:out value="in progress"></c:out>
-                        </c:otherwise>
-                    </c:choose>
-                    </td>
+                    <td><c:out value="${item.dateFrom}"/></td>
+                    <td><c:out value="${item.dateTo}"/></td>
                 </tr>
             </c:forEach>
         </table>
         <ul class="pagination">
-        <c:forEach begin="1" end="${requestScope.countOfOrders}" varStatus="loop">
-            <c:choose>
-                <c:when test="${sessionScope.page eq loop.index}">
-                    <li class="active">
-                        <a href="/hotel/home/?page=${loop.index}">${loop.index}</a>
-                    </li>
-                </c:when>
-                <c:otherwise>
-                    <li class="waves-effect">
-                        <a href="/hotel/home/?page=${loop.index}">${loop.index}</a>
-                    </li>
-                </c:otherwise>
-            </c:choose>
-        </c:forEach>
+            <c:forEach begin="1" end="${requestScope.countOfOrders}" varStatus="loop">
+                <c:choose>
+                    <c:when test="${sessionScope.page eq loop.index}">
+                        <li class="active">
+                            <a href="/hotel/home/?page=${loop.index}">${loop.index}</a>
+                        </li>
+                    </c:when>
+                    <c:otherwise>
+                        <li class="waves-effect">
+                            <a href="/hotel/home/?page=${loop.index}">${loop.index}</a>
+                        </li>
+                    </c:otherwise>
+                </c:choose>
+            </c:forEach>
         </ul>
         <br>
     </div>
-
-    <form action="/hotel/bills" method="post">
-        <input type="hidden" name="command" value="bills-page">
-        <button type="submit"><fmt:message bundle="${msg}" key="client.show-bills-button"/></button>
-    </form>
 </div>
 </body>
 </html>

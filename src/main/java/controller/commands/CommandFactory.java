@@ -4,6 +4,7 @@ package controller.commands;
 import controller.commands.adminCommands.AdminHomePageCommand;
 import controller.commands.adminCommands.ChoseApartmentForOrderCommand;
 import controller.commands.adminCommands.SendBillCommand;
+import controller.commands.clientCommands.BillPaymentCommand;
 import controller.commands.clientCommands.BillsPageCommand;
 import controller.commands.clientCommands.ClientHomePageCommand;
 import controller.commands.clientCommands.CreateOrderCommand;
@@ -22,6 +23,7 @@ public class CommandFactory {
     public static final String SEND_BILL_TO_CLIENT = "create_bill";
     public static final String CLIENT_BILLS_PAGE = "bills-page";
     public static final String CHANGE_LOCALE = "change-locale";
+    public static final String BILL_PAYMENT = "billPayment";
 
     public static Command createCommand(String command) {
 
@@ -37,9 +39,9 @@ public class CommandFactory {
             case LOGIN_PAGE:
                 return new LoginPageCommand();
             case REGISTRATION_PAGE:
-                return new RegistrationPageCommand();
+                return new SignUpPageCommand();
             case REGISTRATION:
-                return new RegistrationCommand();
+                return new SignUpCommand();
             case SIGN_OUT:
                 return new SignOutCommand();
             case ADMIN_HOME_PAGE:
@@ -54,6 +56,8 @@ public class CommandFactory {
                 return new SendBillCommand();
             case CLIENT_BILLS_PAGE:
                 return new BillsPageCommand();
+            case BILL_PAYMENT:
+                return new BillPaymentCommand();
             default:
                 return new SignInCommand();
         }

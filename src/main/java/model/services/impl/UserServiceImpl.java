@@ -17,10 +17,6 @@ import static model.util.Constants.USER_ID_ATTRIBUTE;
 public class UserServiceImpl implements UserService {
     private FactoryDAO factoryDAO;
 
-    public UserServiceImpl() {
-        factoryDAO = FactoryDAO.getInstance();
-    }
-
     private static class Holder {
         private static UserServiceImpl INSTANCE = new UserServiceImpl();
     }
@@ -28,6 +24,11 @@ public class UserServiceImpl implements UserService {
     public static UserServiceImpl getInstance() {
         return Holder.INSTANCE;
     }
+
+    public UserServiceImpl() {
+        factoryDAO = FactoryDAO.getInstance();
+    }
+
 
     @Override
     public Optional<User> signIn(String email, String password) {
@@ -45,6 +46,14 @@ public class UserServiceImpl implements UserService {
     public Optional<User> getById(int id) {
         UserDAO userDAO = factoryDAO.getUserDAO();
         Optional<User> user = userDAO.getById(id);
+        userDAO.close();
+        return user;
+    }
+
+    @Override
+    public Optional<User> getUserByEmail(String email) {
+        UserDAO userDAO = factoryDAO.getUserDAO();
+        Optional<User> user = userDAO.getUserByEmail(email);
         userDAO.close();
         return user;
     }
