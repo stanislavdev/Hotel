@@ -7,4 +7,5 @@ import java.util.List;
 public interface BillService {
     void createNewBill(Bill bill);
     List<Bill> getBillsByClientId(int id);
+    boolean updateBillToPaid(int id);
 }

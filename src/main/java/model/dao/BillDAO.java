@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface BillDAO extends GenericDAO<Bill> {
     List<Bill> getBillsByClientId(int id);
+    boolean updateBillToPaid(int id);
 }
