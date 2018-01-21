@@ -16,7 +16,7 @@
     <form action="/hotel/home" method="post">
         <input type="hidden" name="command" value="sign_out">
         <button class="btn-floating btn-large waves-effect waves-light red right" type="submit">
-            <fmt:message bundle="${msg}" key="client.exit-button"/>
+            <fmt:message bundle="${msg}" key="exit-button"/>
         </button>
     </form>
 </div>
@@ -26,10 +26,11 @@
     <div class="card-panel hoverable">
         <form method="post" action="/hotel/creating_order">
             <input type="hidden" name="command" value="create_order">
+            <input type="hidden" name="currentPage" value="/client_home.jsp">
             <div class="row">
                 <div class="col s3">
                     <label for="selectNumber">
-                        <fmt:message bundle="${msg}" key="client.number-of-rooms"/>
+                        <fmt:message bundle="${msg}" key="number-of-rooms"/>
                     </label>
                     <select class="browser-default" id="selectNumber" name="numberOfRooms">
                         <option value="1">1</option>
@@ -41,7 +42,7 @@
                 </div>
                 <div class="col s3">
                     <label for="selectType">
-                        <fmt:message bundle="${msg}" key="client.apartment-type"/>
+                        <fmt:message bundle="${msg}" key="apartment-type"/>
                     </label>
                     <select class="browser-default" id="selectType" name="apartmentType">
                         <option value="standart">
@@ -99,10 +100,10 @@
         <h4><fmt:message bundle="${msg}" key="client.orders.in-progress"/></h4>
         <table class="bordered">
             <tr>
-                <th><fmt:message bundle="${msg}" key="client.number-of-rooms"/></th>
-                <th><fmt:message bundle="${msg}" key="client.apartment-type"/></th>
-                <th><fmt:message bundle="${msg}" key="client.orders-in-progress.dateFrom"/></th>
-                <th><fmt:message bundle="${msg}" key="client.orders-in-progress.dateTo"/></th>
+                <th><fmt:message bundle="${msg}" key="number-of-rooms"/></th>
+                <th><fmt:message bundle="${msg}" key="apartment-type"/></th>
+                <th><fmt:message bundle="${msg}" key="dateFrom"/></th>
+                <th><fmt:message bundle="${msg}" key="dateTo"/></th>
             </tr>
             <c:forEach items="${sessionScope.orders}" var="item">
                 <tr>
@@ -129,7 +130,6 @@
                 </c:choose>
             </c:forEach>
         </ul>
-        <br>
     </div>
 </div>
 </body>

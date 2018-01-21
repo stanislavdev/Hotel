@@ -1,6 +1,7 @@
 package controller.commands.adminCommands;
 
 import controller.commands.Command;
+import controller.commands.CommandFactory;
 import model.entities.Apartment;
 import model.entities.Order;
 import model.entities.User;
@@ -16,20 +17,23 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Optional;
 
+import static model.util.Constants.*;
+
 public class ChoseApartmentForOrderCommand implements Command {
+    private ApartmentService apartmentService = ApartmentServiceImpl.getInstance();
+    private OrderService orderService = OrderServiceImpl.getInstance();
+
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
-        String orderId = request.getParameter("chosenRadio");
-        request.getSession().setAttribute("orderId", orderId);
-        ApartmentService apartmentService = new ApartmentServiceImpl();
-        OrderService orderService = new OrderServiceImpl();
+        String orderId = request.getParameter(APARTMENT_RADIO_ATTRIBUTE);
+        if (orderId == null) {
+            request.setAttribute(EXCEPTION_ATTRIBUTE, EXCEPTION_ATTRIBUTE);
+            return "redirect:" + CommandFactory.ADMIN_HOME_PAGE;
+        }
+        request.getSession().setAttribute(ORDER_ID_ATTRIBUTE, orderId);
         Optional<Order> order = orderService.getById(Integer.parseInt(orderId));
         List<Apartment> apartmentList = apartmentService.showAvailableApartments(order.get());
-        request.getSession().setAttribute("apartments", apartmentList);
-
-        UserService userService = new UserServiceImpl();
-        User user = userService.getById(order.get().getClientId()).get();
-        request.setAttribute("client", user);
+        request.getSession().setAttribute(APARTMENTS_ATTRIBUTE, apartmentList);
         return APARTMENTS_FOR_ORDER;
     }
 }
