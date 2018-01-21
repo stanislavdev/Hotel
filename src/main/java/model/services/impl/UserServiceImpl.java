@@ -2,10 +2,9 @@ package model.services.impl;
 
 import model.dao.FactoryDAO;
 import model.dao.UserDAO;
-import model.dao.impl.MySQLFactoryDAO;
 import model.entities.User;
-import model.exeptions.EmailExistsException;
 import model.services.UserService;
+import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import java.sql.Connection;
@@ -16,6 +15,8 @@ import static model.util.Constants.USER_ID_ATTRIBUTE;
 
 public class UserServiceImpl implements UserService {
     private FactoryDAO factoryDAO;
+
+    private static final Logger LOGGER = Logger.getLogger(UserServiceImpl.class);
 
     private static class Holder {
         private static UserServiceImpl INSTANCE = new UserServiceImpl();
@@ -70,8 +71,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void signUp(User user) throws EmailExistsException, SQLException {
-        try (Connection connection = factoryDAO.getConnection()) {
+    public void signUp(User user) {
+        Connection connection = factoryDAO.getConnection();
+        try {
             connection.setAutoCommit(false);
             UserDAO userDAO = factoryDAO.getUserDAO();
             if (userDAO.insert(user)) {
@@ -79,7 +81,11 @@ public class UserServiceImpl implements UserService {
             } else {
                 connection.rollback();
             }
+        } catch (SQLException e) {
+            LOGGER.error(e);
+            throw new RuntimeException(e);
         }
+
     }
 
 

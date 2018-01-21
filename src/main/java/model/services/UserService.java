@@ -3,7 +3,6 @@ package model.services;
 import model.entities.User;
 
 import javax.servlet.http.HttpServletRequest;
-import java.sql.SQLException;
 import java.util.Optional;
 
 public interface UserService {
@@ -11,5 +10,5 @@ public interface UserService {
     Optional<User> getById(int id);
     Optional<User> getUserByEmail(String email);
     Optional<User> getUserFromSessionById(HttpServletRequest request);
-    void signUp(User user) throws SQLException;
+    void signUp(User user);
 }
