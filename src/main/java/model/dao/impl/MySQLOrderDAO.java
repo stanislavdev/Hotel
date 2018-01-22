@@ -2,7 +2,6 @@ package model.dao.impl;
 
 import model.dao.OrderDAO;
 import model.entities.Order;
-import model.entities.User;
 import org.apache.log4j.Logger;
 
 import java.sql.Connection;
@@ -32,12 +31,18 @@ public class MySQLOrderDAO implements OrderDAO {
     private static final String SELECT_ORDER_BY_USER = "SELECT * FROM orders " +
             "WHERE orders.client_id = ?";
     private static final String SELECT_ALL_ORDERS = "SELECT * FROM orders";
-    private static final String SELECT_ALL_LIMIT_ORDERS = "SELECT * FROM orders WHERE orders.accepted = 0 LIMIT ?,?";
+    private static final String SELECT_ALL_LIMIT_ORDERS_BY_USER_ID = "SELECT * FROM orders " +
+            "WHERE orders.client_id = ? AND orders.accepted = 0 LIMIT ?,?";
     private static final String SELECT_BY_ID = "SELECT * FROM orders WHERE orders.id = ?";
     private static final String UPDATE_TO_ACCEPTED = "UPDATE orders SET orders.accepted = 1 WHERE orders.id = ?";
     private static final String INSERT_INTO_ORDERS_HAS_APARTMENTS = "INSERT INTO orders_has_apartments " +
             "(orders_id, apartments_id) VALUES (?,?)";
-
+    private static final String SELECT_ALL_LIMIT_ORDERS = "SELECT * FROM orders " +
+            "WHERE orders.accepted = 0 LIMIT ?,?";
+    private static final String SELECT_NUMBER_OF_ORDERS = "SELECT COUNT(*) FROM orders WHERE orders.accepted =0";
+    private static final String SELECT_NUMBER_OF_ORDERS_BY_CLIENT_ID = "SELECT COUNT(*) FROM orders " +
+            "WHERE orders.client_id = ? AND orders.accepted = 0";
+    private static final String REJECT_ORDER_BY_ID = "UPDATE orders SET orders.accepted = -1 WHERE orders.id = ?";
 
     MySQLOrderDAO(Connection connection) {
         this.connection = connection;
@@ -57,10 +62,25 @@ public class MySQLOrderDAO implements OrderDAO {
     }
 
     @Override
-    public List<Order> getAllLimit(int start, int total) {
+    public List<Order> getAllLimitedOrdersByUserId(int start, int total, int userId) {
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_LIMIT_ORDERS_BY_USER_ID);
+            preparedStatement.setInt(1, userId);
+            preparedStatement.setInt(2, start - 1);
+            preparedStatement.setInt(3, total);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            return parseOrderList(resultSet);
+        } catch (SQLException e) {
+            LOGGER.error(e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public List<Order> getAllLimitedOrders(int start, int total) {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_LIMIT_ORDERS);
-            preparedStatement.setInt(1, start-1);
+            preparedStatement.setInt(1, start - 1);
             preparedStatement.setInt(2, total);
             ResultSet resultSet = preparedStatement.executeQuery();
             return parseOrderList(resultSet);
@@ -77,6 +97,42 @@ public class MySQLOrderDAO implements OrderDAO {
             preparedStatement.setInt(1, orderId);
             preparedStatement.setInt(2, apartmentId);
             return preparedStatement.executeUpdate() > 0;
+        } catch (SQLException e) {
+            LOGGER.error(e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public int getNumberOfOrders() {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_NUMBER_OF_ORDERS)) {
+            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            return resultSet.getInt(1);
+        } catch (SQLException e) {
+            LOGGER.error(e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public int getNumberOfOrdersByClientId(int id) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(SELECT_NUMBER_OF_ORDERS_BY_CLIENT_ID)) {
+            preparedStatement.setInt(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            return resultSet.getInt(1);
+        } catch (SQLException e) {
+            LOGGER.error(e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void rejectOrderById(int id) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(REJECT_ORDER_BY_ID)) {
+            preparedStatement.setInt(1, id);
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             LOGGER.error(e);
             throw new RuntimeException(e);
