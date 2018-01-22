@@ -1,6 +1,7 @@
 package model.services.impl;
 
 import model.dao.ApartmentDAO;
+import model.dao.FactoryDAO;
 import model.dao.impl.MySQLFactoryDAO;
 import model.entities.Apartment;
 import model.entities.Order;
@@ -10,34 +11,50 @@ import java.util.List;
 import java.util.Optional;
 
 public class ApartmentServiceImpl implements ApartmentService {
-    private MySQLFactoryDAO factoryDAO;
+    private FactoryDAO factoryDAO;
 
-    public ApartmentServiceImpl(){
-        factoryDAO = new MySQLFactoryDAO();
+    private static class Holder {
+        private static ApartmentServiceImpl INSTANCE = new ApartmentServiceImpl();
+    }
+
+    public static ApartmentServiceImpl getInstance() {
+        return Holder.INSTANCE;
+    }
+
+    public ApartmentServiceImpl() {
+        factoryDAO = FactoryDAO.getInstance();
     }
 
     @Override
     public List<Apartment> showAvailableApartments(Order order) {
         ApartmentDAO apartmentDAO = factoryDAO.getApartmentDAO();
-        return apartmentDAO.showAvailable(order);
+        List<Apartment> apartmentList = apartmentDAO.showAvailable(order);
+        apartmentDAO.close();
+        return apartmentList;
     }
 
     @Override
     public List<Apartment> getAll() {
         ApartmentDAO apartmentDAO = factoryDAO.getApartmentDAO();
-        return apartmentDAO.getAll();
+        List<Apartment> apartmentList = apartmentDAO.getAll();
+        apartmentDAO.close();
+        return apartmentList;
     }
 
     @Override
     public Optional<Apartment> getById(int id) {
         ApartmentDAO apartmentDAO = factoryDAO.getApartmentDAO();
-        return apartmentDAO.getById(id);
+        Optional<Apartment> apartment = apartmentDAO.getById(id);
+        apartmentDAO.close();
+        return apartment;
 
     }
 
     @Override
     public Apartment getByOrderId(int orderId) {
         ApartmentDAO apartmentDAO = factoryDAO.getApartmentDAO();
-        return apartmentDAO.getByOrderID(orderId);
+        Apartment apartment = apartmentDAO.getByOrderID(orderId);
+        apartmentDAO.close();
+        return apartment;
     }
 }
