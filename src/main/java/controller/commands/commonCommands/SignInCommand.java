@@ -12,34 +12,38 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Optional;
 
+import static model.util.Constants.*;
+
 
 public class SignInCommand implements Command {
+    private UserService userService = UserServiceImpl.getInstance();
 
-    private static final String EMAIL = "email";
-    private static final String PASSWORD = "password";
-    private static final String USER_ATTRIBUTE = "userId";
+    private String email;
+    private String password;
 
     private static final Logger LOGGER = Logger.getLogger(SignInCommand.class);
 
-    private UserService userService = UserServiceImpl.getInstance();
-
-
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
-        String email = request.getParameter(EMAIL);
-        String password = request.getParameter(PASSWORD);
+        init(request);
         Optional<User> user = userService.signIn(email, password);
         if (user.isPresent()) {
-            request.getSession().setAttribute(USER_ATTRIBUTE, user.get().getId());
+            request.getSession().setAttribute(USER_ID_ATTRIBUTE, user.get().getId());
             if (user.get().getRole().equals(Role.ADMIN)) {
                 LOGGER.info("Admin " + user.get().getId() + " sign in");
-                return "redirect:" +  CommandFactory.ADMIN_HOME_PAGE;
+                return "redirect:" + CommandFactory.ADMIN_HOME_PAGE;
             } else {
                 LOGGER.info("Client " + user.get().getId() + " sign in");
                 return "redirect:" + CommandFactory.CLIENT_HOME_PAGE;
             }
         } else {
+            request.setAttribute(EXCEPTION_ATTRIBUTE, EXCEPTION_ATTRIBUTE);
             return SIGN_IN_JSP;
         }
+    }
+
+    private void init(HttpServletRequest request) {
+        email = request.getParameter(EMAIL_ATTRIBUTE);
+        password = request.getParameter(PASSWORD_ATTRIBUTE);
     }
 }

@@ -4,15 +4,12 @@ import controller.commands.Command;
 import controller.commands.CommandFactory;
 import model.entities.Role;
 import model.entities.User;
-import model.exeptions.WrongInputEmailException;
-import model.exeptions.WrongPasswordException;
 import model.services.UserService;
 import model.services.impl.UserServiceImpl;
 import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.sql.SQLException;
 
 import static model.util.Constants.*;
 
@@ -20,33 +17,43 @@ public class SignUpCommand implements Command {
 
     private UserService userService = UserServiceImpl.getInstance();
 
+    private String email;
+    private String password;
+    private User user;
+
     private static Logger LOGGER = Logger.getLogger(SignUpCommand.class);
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
-        String email = request.getParameter(EMAIL_ATTRIBUTE);
-        String password = request.getParameter(PASSWORD_ATTRIBUTE);
-        User user = new User.UserBuilder()
-                .email(email)
-                .password(password)
-                .role(Role.CLIENT.name())
-                .build();
-        try {
-            validate(user);
+        init(request);
+        createUser();
+        if (isValidData(user)) {
             userService.signUp(user);
             request.getSession().setAttribute(USER_ID_ATTRIBUTE, user.getId());
+            LOGGER.info("Client " + user.getId() + " has registered");
             return "redirect:" + CommandFactory.CLIENT_HOME_PAGE;
-        } catch (WrongInputEmailException | WrongPasswordException | SQLException e) {
+        } else {
             request.setAttribute(EXCEPTION_ATTRIBUTE, INPUT_DATA_EXCEPTION);
-            LOGGER.error(e);
             return REGISTRATION_PAGE_JSP;
         }
     }
 
-    private void validate(User user) throws WrongInputEmailException, WrongPasswordException {
-        if (!user.getEmail().matches(EMAIL_REGEX) || userService.getUserByEmail(user.getEmail()).isPresent())
-            throw new WrongInputEmailException();
-        if (!user.getPassword().matches(PASSWORD_REGEX))
-            throw new WrongPasswordException();
+    private void init(HttpServletRequest request) {
+        email = request.getParameter(EMAIL_REGISTRATION_ATTRIBUTE);
+        password = request.getParameter(PASSWORD_REGISTRATION_ATTRIBUTE);
+    }
+
+    private void createUser() {
+        user = new User.UserBuilder()
+                .email(email)
+                .password(password)
+                .role(Role.CLIENT.name())
+                .build();
+    }
+
+    private boolean isValidData(User user) {
+        return user.getEmail().matches(EMAIL_REGEX) &&
+                user.getPassword().matches(PASSWORD_REGEX) &&
+                !userService.getUserByEmail(user.getEmail()).isPresent();
     }
 }

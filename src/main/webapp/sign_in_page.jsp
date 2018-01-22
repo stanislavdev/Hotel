@@ -13,17 +13,18 @@
    <span class="blue-text text-darken-2">
        <h5><fmt:message bundle="${msg}" key="sign-in.title"/></h5>
    </span>
-    <button class="btn-floating btn-large blue-grey darken-1 right">
+    <div class="col l12 right">
         <form action="/hotel/locale">
             <input type="hidden" name="command" value="change-locale">
-            <input type="hidden" name="currentPage" value="/sign_in.jsp">
-            <select class="browser-default  blue-grey darken-1 right" name="language" onclick="this.form.submit()">
+            <input type="hidden" name="currentPage" value="/sign_in_page.jsp">
+            <select class="browser-default  blue right" name="language" onclick="this.form.submit()">
                 <option value="ua">ua</option>
                 <option value="en">en</option>
             </select>
         </form>
-    </button>
+    </div>
 </div>
+<br><br>
 <div class="container">
     <div class="card-panel hoverable">
         <form method="POST" action="/hotel/home">
@@ -34,20 +35,31 @@
             <label><fmt:message bundle="${msg}" key="password.input"/>
                 <input type="password" name="password">
             </label>
-            <div class="center-align">
-                <button class="btn waves-effect waves-light blue darken-2 center" type="submit">
-                    <fmt:message bundle="${msg}" key="button.ok"/>
-                </button>
+            <div class="row">
+                <div class="col s3">
+                    <button class="btn waves-effect waves-light blue darken-2" style="width: 200px"
+                            type="submit">
+                        <fmt:message bundle="${msg}" key="button.ok"/>
+                    </button>
+                </div>
+                <div class="col s9">
+                    <c:if test="${requestScope.exception != null}">
+                        <h6>
+                        <span class="red-text">
+                            <fmt:message bundle="${msg}" key="exception.invalid-sign-in"/>
+                        </span>
+                        </h6>
+                    </c:if>
+                </div>
             </div>
         </form>
-        <div class="center-align">
-            <form method="POST" action="/hotel/registration-page">
-                <input type="hidden" name="command" value="registration_page">
-                <button class="btn waves-effect waves-light blue darken-2 center" type="submit">
-                    <fmt:message bundle="${msg}" key="registration.button"/>
-                </button>
-            </form>
-        </div>
+        <form method="POST" action="/hotel/registration-page">
+            <input type="hidden" name="command" value="registration_page">
+            <button class="btn waves-effect waves-light blue darken-2" style="width: 200px"
+                    type="submit">
+                <fmt:message bundle="${msg}" key="registration.button"/>
+            </button>
+        </form>
     </div>
 </div>
 </body>

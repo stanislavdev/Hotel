@@ -16,11 +16,12 @@ import java.util.Optional;
 import static model.util.Constants.USER_ID_ATTRIBUTE;
 
 public class SignOutCommand implements Command {
+    private UserService userService = UserServiceImpl.getInstance();
+
     private static final Logger LOGGER = Logger.getLogger(SignOutCommand.class);
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
-        UserService userService = new UserServiceImpl();
         Optional<User> user = userService.getUserFromSessionById(request);
         if (user.get().getRole().equals(model.entities.Role.ADMIN)) {
             LOGGER.info("Admin " + user.get().getId() + " sign out");
