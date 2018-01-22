@@ -1,5 +1,6 @@
 package controller.filters;
 
+import controller.commands.CommandFactory;
 import model.entities.Role;
 import model.entities.User;
 import model.services.UserService;
@@ -18,9 +19,7 @@ import static model.util.Constants.USER_ID_ATTRIBUTE;
 public class RequestLoginFilter implements Filter {
 
     private List<String> commonCommands = new ArrayList<>();
-
     private List<String> clientCommands = new ArrayList<>();
-
     private List<String> adminCommands = new ArrayList<>();
 
     @Override
@@ -42,6 +41,7 @@ public class RequestLoginFilter implements Filter {
         adminCommands.add(SIGN_OUT);
         adminCommands.add(CHOSE_APARTMENT_BY_ADMIN);
         adminCommands.add(SEND_BILL_TO_CLIENT);
+        adminCommands.add(REJECT_ORDER);
     }
 
     @Override
@@ -49,7 +49,7 @@ public class RequestLoginFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         UserService userService = new UserServiceImpl();
         String command = String.valueOf(request.getParameter("command"));
-        String url = String.valueOf(request.getRequestURL());
+        String uri = request.getRequestURI();
         String page = request.getParameter("page");
         Optional<User> user = userService.getUserFromSessionById(request);
 
@@ -57,7 +57,7 @@ public class RequestLoginFilter implements Filter {
 
         boolean isGuest = (!user.isPresent()) && commonCommands.contains(command);
         boolean isAdmin = (user.isPresent()) && user.get().getRole().equals(Role.ADMIN) &&
-                adminCommands.contains(command) || adminCommands.contains(url);
+                adminCommands.contains(command) || adminCommands.contains(uri);
         boolean isClient = (user.isPresent()) && user.get().getRole().equals(Role.CLIENT) &&
                 clientCommands.contains(command);
 
@@ -69,13 +69,16 @@ public class RequestLoginFilter implements Filter {
             request.setAttribute("command", command);
         }
 
-        if (isSignedIn || isPage) {
+        if (isSignedIn || (isPage && uri.equals("/hotel/home/"))) {
             if (user.get().getRole() == Role.ADMIN) {
                 request.setAttribute("command", ADMIN_HOME_PAGE);
             } else {
                 request.setAttribute("command", CLIENT_HOME_PAGE);
-
             }
+        }
+
+        if (isSignedIn || (isPage && uri.equals("/hotel/bills/"))) {
+                request.setAttribute("command", CLIENT_BILLS_PAGE);
         }
 
         if (needToSignIn) {
