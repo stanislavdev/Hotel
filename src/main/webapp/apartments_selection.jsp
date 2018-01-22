@@ -13,35 +13,54 @@
    <span class="blue-text text-darken-2">
        <h5><fmt:message bundle="${msg}" key="admin.apartments-choice"/></h5>
    </span>
-    <form action="/hotel/home" method="post">
+    <form action="/" method="post">
         <input type="hidden" name="command" value="sign_out">
         <button class="btn-floating btn-large waves-effect waves-light red right" type="submit">
             <fmt:message bundle="${msg}" key="exit-button"/>
         </button>
     </form>
+    <form action="/hotel/home" method="post">
+        <input type="hidden" name="command" value="admin_home_page">
+        <button class="btn-floating btn-large waves-effect waves-light blue left" type="submit">
+            <img src="/css/ic_home_white_24dp_1x.png">
+        </button>
+    </form>
 </div>
 <br><br>
-<c:out value="Chose an apartment for ${client.email}"/>
-<form method="post" action="/hotel/home">
-    <input type="hidden" name="command" value="create_bill">
-    <table>
-        <tr>
-            <th>Number of rooms</th>
-            <th>Type</th>
-            <th>Price</th>
-        </tr>
-        <c:forEach items="${sessionScope.apartments}" var="item">
+<div class="container">
+    <form method="post" action="/hotel/home">
+        <input type="hidden" name="command" value="create_bill">
+        <table class="bordered">
             <tr>
-                <td><c:out value="${item.numberOfRooms}"/></td>
-                <td><c:out value="${item.apartmentType}"/></td>
-                <td><c:out value="${item.price}"/></td>
-                <td>
-                    <input type="radio" name="chosenApartment" value="${item.id}"/>
-                </td>
+                <th><fmt:message bundle="${msg}" key="number-of-rooms"/></th>
+                <th><fmt:message bundle="${msg}" key="apartment-type"/></th>
+                <th><fmt:message bundle="${msg}" key="price-per-day"/></th>
             </tr>
-        </c:forEach>
-    </table>
-    <input type="submit" value="Send a bill">
-</form>
+            <c:forEach items="${sessionScope.apartments}" var="item">
+                <tr>
+                    <td><c:out value="${item.numberOfRooms}"/></td>
+                    <td><c:out value="${item.apartmentType}"/></td>
+                    <td><c:out value="${item.price}"/></td>
+                    <td>
+                        <p>
+                            <input id="${item.id}" type="radio" name="apartmentId" value="${item.id}"/>
+                            <label for="${item.id}"></label>
+                        </p>
+                    </td>
+                </tr>
+            </c:forEach>
+        </table>
+        <br><br>
+        <button class="btn waves-effect waves-light" type="submit">
+            <fmt:message bundle="${msg}" key="admin.buttons.send-bill"/>
+        </button>
+    </form>
+    <form method="post" action="/hotel/bills">
+        <input type="hidden" name="command" value="reject-order"/>
+        <button class="btn waves-effect waves-light red lighten-1" type="submit">
+            <fmt:message bundle="${msg}" key="admin.buttons.reject"/>
+        </button>
+    </form>
+</div>
 </body>
 </html>
