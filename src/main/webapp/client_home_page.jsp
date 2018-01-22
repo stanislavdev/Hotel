@@ -13,18 +13,17 @@
    <span class="blue-text text-darken-2">
        <h5><fmt:message bundle="${msg}" key="client.booking-label"/></h5>
    </span>
-    <form action="/hotel/home" method="post">
+    <form action="/" method="post">
         <input type="hidden" name="command" value="sign_out">
         <button class="btn-floating btn-large waves-effect waves-light red right" type="submit">
             <fmt:message bundle="${msg}" key="exit-button"/>
         </button>
     </form>
 </div>
-<br>
-
+<br><br>
 <div class="container">
     <div class="card-panel hoverable">
-        <form method="post" action="/hotel/creating_order">
+        <form method="post" action="/hotel/home">
             <input type="hidden" name="command" value="create_order">
             <input type="hidden" name="currentPage" value="/client_home.jsp">
             <div class="row">
@@ -88,7 +87,6 @@
         <div class="col s6">
             <form action="/hotel/bills" method="post">
                 <input type="hidden" name="command" value="bills-page">
-
                 <button class="btn waves-effect waves-light blue darken-2" type="submit">
                     <fmt:message bundle="${msg}" key="client.show-bills-button"/>
                 </button>

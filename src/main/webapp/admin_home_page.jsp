@@ -13,7 +13,7 @@
    <span class="blue-text text-darken-2">
        <h5><fmt:message bundle="${msg}" key="admin.home-page"/></h5>
    </span>
-    <form action="/hotel/home" method="post">
+    <form action="/" method="post">
         <input type="hidden" name="command" value="sign_out">
         <button class="btn-floating btn-large waves-effect waves-light red right" type="submit">
             <fmt:message bundle="${msg}" key="exit-button"/>
@@ -22,7 +22,7 @@
 </div>
 <br><br>
 <div class="container">
-    <form method="post" action="/hotel/apartments-for-order">
+    <form method="post" action="/hotel/apartments">
         <input type="hidden" name="command" value="chose_apartment">
         <table id="orders" class="bordered">
             <tr>
@@ -44,7 +44,7 @@
                             <td><c:out value="${item.client.email}"/></td>
                             <td>
                                 <p>
-                                    <input id="${item.id}" type="radio" name="chosenRadio" value="${item.id}"/>
+                                    <input id="${item.id}" type="radio" name="orderId" value="${item.id}"/>
                                     <label for="${item.id}"></label>
                                 </p>
                             </td>
@@ -71,12 +71,12 @@
             </c:forEach>
         </ul>
         <div class="row">
-            <div class="col s2">
+            <div class="col l7">
                 <button class="btn waves-effect waves-light blue darken-2" type="submit">
-                    Show
+                    <fmt:message bundle="${msg}" key="admin.show-available-apartments"/>
                 </button>
             </div>
-            <div class="col l5">
+            <div class="col l7">
                 <c:if test="${requestScope.exception ne null}">
                     <h6 class="left">
                             <span class="flow-text red-text">
