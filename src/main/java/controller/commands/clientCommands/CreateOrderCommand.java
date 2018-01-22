@@ -3,7 +3,6 @@ package controller.commands.clientCommands;
 import controller.commands.Command;
 import controller.commands.CommandFactory;
 import model.entities.ApartmentType;
-import model.exeptions.WrongDateException;
 import model.services.OrderService;
 import model.services.impl.OrderServiceImpl;
 import org.apache.log4j.Logger;
@@ -11,9 +10,6 @@ import org.apache.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.sql.Date;
-import java.sql.SQLException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import static model.util.Constants.*;
@@ -23,39 +19,47 @@ public class CreateOrderCommand implements Command {
 
     private static final Logger LOGGER = Logger.getLogger(CreateOrderCommand.class);
 
+    private String numberOfRooms;
+    private String apartmentType;
+    private String dateFrom;
+    private String dateTo;
+    private int clientId;
+
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
-        String sClientId = String.valueOf(request.getSession().getAttribute(USER_ID_ATTRIBUTE));
-        String numberOfRooms = request.getParameter(NUMBER_OF_ROOMS_ATTRIBUTE);
-        String apartmentType = request.getParameter(APARTMENT_TYPE_ATTRIBUTE);
-        String dateFrom = request.getParameter(DATE_FROM_ATTRIBUTE);
-        String dateTo = request.getParameter(DATE_TO_ATTRIBUTE);
-        try {
-            validateDate(dateFrom, dateTo);
-        } catch (WrongDateException e) {
-            LOGGER.error(e);
+        init(request);
+        if (!isValidDate(dateFrom, dateTo)) {
             request.setAttribute(EXCEPTION_ATTRIBUTE, "wrongDateException");
             return "redirect:" + CommandFactory.CLIENT_HOME_PAGE;
         }
-
-        int clientId = Integer.parseInt(sClientId);
-        orderService.createOrder(clientId, Date.valueOf(dateFrom), Date.valueOf(dateTo),
-                ApartmentType.valueOf(apartmentType.toLowerCase()), numberOfRooms);
-        request.getSession().setAttribute(ORDERS_ATTRIBUTE, orderService.getAllUserOrders(clientId));
+        createOrdersList(request);
+        LOGGER.info("Client " + clientId + " create new order");
         return "redirect:" + CommandFactory.CLIENT_HOME_PAGE;
     }
 
-    private void validateDate(String dateFrom, String dateTo) throws WrongDateException {
+    private boolean isValidDate(String dateFrom, String dateTo) {
         if (dateFrom.equals("") || dateTo.equals("")) {
-            throw new WrongDateException();
+            return false;
         }
-
         Date currentDate = new Date(Calendar.getInstance().getTime().getTime());
         Date startDate = Date.valueOf(dateFrom);
         Date finishDate = Date.valueOf(dateTo);
+        return !startDate.after(finishDate)
+                && !startDate.before(currentDate)
+                && !finishDate.before(currentDate);
+    }
 
-        if (startDate.after(finishDate) || startDate.before(currentDate) || finishDate.before(currentDate)) {
-            throw new WrongDateException();
-        }
+    private void init(HttpServletRequest request) {
+        clientId = (int) request.getSession().getAttribute(USER_ID_ATTRIBUTE);
+        numberOfRooms = request.getParameter(NUMBER_OF_ROOMS_ATTRIBUTE);
+        apartmentType = request.getParameter(APARTMENT_TYPE_ATTRIBUTE);
+        dateFrom = request.getParameter(DATE_FROM_ATTRIBUTE);
+        dateTo = request.getParameter(DATE_TO_ATTRIBUTE);
+    }
+
+    private void createOrdersList(HttpServletRequest request) {
+        orderService.createOrder(clientId, Date.valueOf(dateFrom), Date.valueOf(dateTo),
+                ApartmentType.valueOf(apartmentType.toLowerCase()), numberOfRooms);
+        request.getSession().setAttribute(ORDERS_ATTRIBUTE, orderService.getAllUserOrders(clientId));
     }
 }
