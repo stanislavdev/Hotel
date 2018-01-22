@@ -28,8 +28,10 @@ public class MySQLBillDAO implements BillDAO {
             "VALUE (?,?,?,?)";
     private static final String SELECT_BILLS_FOR_CLIENT = "SELECT * FROM bills JOIN orders " +
             "ON bills.order_id = orders.id " +
-            "JOIN users ON orders.client_id = users.id WHERE client_id = ?";
+            "JOIN users ON orders.client_id = users.id WHERE client_id = ? LIMIT ?,?";
     private static final String UPDATE_TO_PAID = "UPDATE bills SET isPaid = 1 WHERE id = ?";
+    private static final String SELECT_BILLS_COUNT_BY_CLIENT_ID = "SELECT COUNT(*) FROM bills " +
+            "INNER  JOIN orders o ON bills.order_id = o.id WHERE o.client_id = ?";
 
     MySQLBillDAO(Connection connection) {
         this.connection = connection;
@@ -69,10 +71,12 @@ public class MySQLBillDAO implements BillDAO {
 
 
     @Override
-    public List<Bill> getBillsByClientId(int id) {
+    public List<Bill> getBillsByClientId(int start, int total,int id) {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BILLS_FOR_CLIENT);
             preparedStatement.setInt(1, id);
+            preparedStatement.setInt(2, start-1);
+            preparedStatement.setInt(3, total);
             ResultSet resultSet = preparedStatement.executeQuery();
             return parseBillList(resultSet);
         } catch (SQLException e) {
@@ -87,6 +91,20 @@ public class MySQLBillDAO implements BillDAO {
             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_TO_PAID);
             preparedStatement.setInt(1, id);
             return preparedStatement.executeUpdate() > 0;
+        } catch (SQLException e) {
+            LOGGER.error(e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public int getNumberOfBillsByClientId(int id) {
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BILLS_COUNT_BY_CLIENT_ID);
+            preparedStatement.setInt(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            return resultSet.getInt(1);
         } catch (SQLException e) {
             LOGGER.error(e);
             throw new RuntimeException(e);
