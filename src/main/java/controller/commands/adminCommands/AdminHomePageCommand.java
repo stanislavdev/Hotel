@@ -1,8 +1,8 @@
 package controller.commands.adminCommands;
 
 import controller.commands.Command;
+import model.util.Pagination;
 import model.entities.Order;
-import model.entities.User;
 import model.services.UserService;
 import model.services.OrderService;
 import model.services.impl.UserServiceImpl;
@@ -12,42 +12,35 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
-public class AdminHomePageCommand implements Command {
+import static model.util.Constants.COUNT_OF_ORDERS_ATTRIBUTE;
+import static model.util.Constants.ORDERS_ATTRIBUTE;
+
+public class AdminHomePageCommand implements Command, Pagination {
+    private OrderService orderService = OrderServiceImpl.getInstance();
+    private UserService userService = UserServiceImpl.getInstance();
+
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
-        String sPage = request.getParameter("page");
-        int pageId;
-        if (sPage == null) {
-            pageId = 1;
-        } else {
-            pageId = Integer.parseInt(sPage);
-        }
-        int total = 3;
-        if (pageId != 1) {
-            pageId = pageId - 1;
-            pageId = pageId * total + 1;
-        }
-
-        int size = 0;
-        OrderService orderService = new OrderServiceImpl();
-        List<Order> ordersForCount = orderService.getAllOrders();
-        for (Order order : ordersForCount) {
-            if (order.getAccepted() == 0) {
-                size++;
-            }
-        }
-        if (size % total == 0) {
-            request.setAttribute("countOfOrders", (size / total));
-        } else {
-            request.setAttribute("countOfOrders", (size / total)+1);
-        }
-
-        List<Order> orders = orderService.getAllLimitedOrders(pageId, total);
-        UserService userService = new UserServiceImpl();
-        for (Order order : orders) {
-            order.setClient((User) userService.getById(order.getClientId()).get());
-        }
-        request.getSession().setAttribute("orders", orders);
+        setAttributeForPagination(request);
+        createOrdersList(request);
         return ADMIN_HOME_JSP;
+    }
+
+    private void setAttributeForPagination(HttpServletRequest request) {
+        int size = orderService.getTotalNumberOfOrders();
+        if (size % NUMBER_OF_ENTRIES_FOR_ONE_PAGE == 0) {
+            request.setAttribute(COUNT_OF_ORDERS_ATTRIBUTE, (size / NUMBER_OF_ENTRIES_FOR_ONE_PAGE));
+        } else {
+            request.setAttribute(COUNT_OF_ORDERS_ATTRIBUTE, (size / NUMBER_OF_ENTRIES_FOR_ONE_PAGE) + 1);
+        }
+    }
+
+    private void createOrdersList(HttpServletRequest request) {
+        int startPosition = Pagination.getPageId(request);
+        List<Order> orders = orderService.getAllLimitedOrders(startPosition, NUMBER_OF_ENTRIES_FOR_ONE_PAGE);
+        for (Order order : orders) {
+            order.setClient(userService.getById(order.getClientId()).get());
+        }
+        request.getSession().setAttribute(ORDERS_ATTRIBUTE, orders);
     }
 }
