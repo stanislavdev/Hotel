@@ -57,32 +57,18 @@ public class RequestLoginFilter implements Filter {
         uri = request.getRequestURI();
         user = userService.getUserFromSessionById(request);
         command = request.getParameter(COMMAND_ATTRIBUTE);
-
         if (hasAccessToCommon() || hasAdminAccess() || hasClientAccess()) {
             request.setAttribute(COMMAND_ATTRIBUTE, command);
         } else {
             request.setAttribute(COMMAND_ATTRIBUTE, LOGIN_PAGE);
         }
-
         if (isRequireNotClientCommands())
             request.setAttribute(COMMAND_ATTRIBUTE, CLIENT_HOME_PAGE);
-
         if (isRequireNotAdminCommands())
-
-
-
             request.setAttribute(COMMAND_ATTRIBUTE, ADMIN_HOME_PAGE);
-
-
         if (page != null)
             createCommandForPagination(request);
-
         filterChain.doFilter(request, servletResponse);
-    }
-
-    @Override
-    public void destroy() {
-
     }
 
     private void createCommandForPagination(HttpServletRequest request) {
@@ -93,7 +79,6 @@ public class RequestLoginFilter implements Filter {
                 request.setAttribute(COMMAND_ATTRIBUTE, CLIENT_HOME_PAGE);
             }
         }
-
         if (uri.matches("/hotel/bills/")) {
             request.setAttribute(COMMAND_ATTRIBUTE, CLIENT_BILLS_PAGE);
         }
@@ -121,5 +106,9 @@ public class RequestLoginFilter implements Filter {
     private boolean isRequireNotAdminCommands() {
         return user.isPresent() && user.get().getRole().equals(Role.ADMIN)
                 && !adminCommands.contains(command);
+    }
+
+    @Override
+    public void destroy() {
     }
 }
