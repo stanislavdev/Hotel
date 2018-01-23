@@ -32,7 +32,7 @@ public class MySQLOrderDAO implements OrderDAO {
             "WHERE orders.client_id = ?";
     private static final String SELECT_ALL_ORDERS = "SELECT * FROM orders";
     private static final String SELECT_ALL_LIMIT_ORDERS_BY_USER_ID = "SELECT * FROM orders " +
-            "WHERE orders.client_id = ? AND orders.accepted = 0 LIMIT ?,?";
+            "WHERE orders.client_id = ? AND (orders.accepted = 0 OR orders.accepted = -1) LIMIT ?,?";
     private static final String SELECT_BY_ID = "SELECT * FROM orders WHERE orders.id = ?";
     private static final String UPDATE_TO_ACCEPTED = "UPDATE orders SET orders.accepted = 1 WHERE orders.id = ?";
     private static final String INSERT_INTO_ORDERS_HAS_APARTMENTS = "INSERT INTO orders_has_apartments " +
@@ -41,7 +41,7 @@ public class MySQLOrderDAO implements OrderDAO {
             "WHERE orders.accepted = 0 LIMIT ?,?";
     private static final String SELECT_NUMBER_OF_ORDERS = "SELECT COUNT(*) FROM orders WHERE orders.accepted =0";
     private static final String SELECT_NUMBER_OF_ORDERS_BY_CLIENT_ID = "SELECT COUNT(*) FROM orders " +
-            "WHERE orders.client_id = ? AND orders.accepted = 0";
+            "WHERE orders.client_id = ? AND (orders.accepted = 0 OR orders.accepted = -1)";
     private static final String REJECT_ORDER_BY_ID = "UPDATE orders SET orders.accepted = -1 WHERE orders.id = ?";
 
     MySQLOrderDAO(Connection connection) {

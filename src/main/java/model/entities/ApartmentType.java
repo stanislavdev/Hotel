@@ -1,7 +1,7 @@
 package model.entities;
 
 public enum ApartmentType {
-    standart,
+    standard,
     business,
     deluxe,
     president

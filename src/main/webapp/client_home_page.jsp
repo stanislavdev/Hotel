@@ -44,7 +44,7 @@
                         <fmt:message bundle="${msg}" key="apartment-type"/>
                     </label>
                     <select class="browser-default" id="selectType" name="apartmentType">
-                        <option value="standart">
+                        <option value="standard">
                             <fmt:message bundle="${msg}" key="client.apartment-type.standard"/>
                         </option>
                         <option value="business">
@@ -102,6 +102,7 @@
                 <th><fmt:message bundle="${msg}" key="apartment-type"/></th>
                 <th><fmt:message bundle="${msg}" key="dateFrom"/></th>
                 <th><fmt:message bundle="${msg}" key="dateTo"/></th>
+                <th><fmt:message bundle="${msg}" key="status"/></th>
             </tr>
             <c:forEach items="${sessionScope.orders}" var="item">
                 <tr>
@@ -109,6 +110,14 @@
                     <td><c:out value="${item.apartmentType}"/></td>
                     <td><c:out value="${item.dateFrom}"/></td>
                     <td><c:out value="${item.dateTo}"/></td>
+                    <c:choose>
+                        <c:when test="${item.accepted eq 0}">
+                            <td><fmt:message bundle="${msg}" key="status.in-progress"/></td>
+                        </c:when>
+                        <c:when test="${item.accepted eq -1}">
+                            <td><fmt:message bundle="${msg}" key="status.rejected"/></td>
+                        </c:when>
+                    </c:choose>
                 </tr>
             </c:forEach>
         </table>

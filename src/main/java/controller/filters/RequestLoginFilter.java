@@ -1,6 +1,5 @@
 package controller.filters;
 
-import controller.commands.CommandFactory;
 import model.entities.Role;
 import model.entities.User;
 import model.services.UserService;
@@ -13,7 +12,8 @@ import java.io.IOException;
 import java.util.*;
 
 import static controller.commands.CommandFactory.*;
-import static model.util.Constants.USER_ID_ATTRIBUTE;
+import static model.util.Constants.COMMAND_ATTRIBUTE;
+import static model.util.Constants.PAGE_ATTRIBUTE;
 
 @WebFilter("/hotel/*")
 public class RequestLoginFilter implements Filter {
@@ -22,9 +22,14 @@ public class RequestLoginFilter implements Filter {
     private List<String> clientCommands = new ArrayList<>();
     private List<String> adminCommands = new ArrayList<>();
 
+    private Optional<User> user;
+    private String command;
+    private String uri;
+
+    private UserService userService = UserServiceImpl.getInstance();
+
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-
         commonCommands.add(LOGIN_PAGE);
         commonCommands.add(REGISTRATION);
         commonCommands.add(SIGN_IN);
@@ -45,45 +50,32 @@ public class RequestLoginFilter implements Filter {
     }
 
     @Override
-    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
+            throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
-        UserService userService = new UserServiceImpl();
-        String command = String.valueOf(request.getParameter("command"));
-        String uri = request.getRequestURI();
-        String page = request.getParameter("page");
-        Optional<User> user = userService.getUserFromSessionById(request);
+        String page = request.getParameter(PAGE_ATTRIBUTE);
+        uri = request.getRequestURI();
+        user = userService.getUserFromSessionById(request);
+        command = request.getParameter(COMMAND_ATTRIBUTE);
 
-        boolean isPagePresent = (page != null);
-
-        boolean isGuest = (!user.isPresent()) && commonCommands.contains(command);
-        boolean isAdmin = (user.isPresent()) && user.get().getRole().equals(Role.ADMIN) &&
-                adminCommands.contains(command) || adminCommands.contains(uri);
-        boolean isClient = (user.isPresent()) && user.get().getRole().equals(Role.CLIENT) &&
-                clientCommands.contains(command);
-
-        boolean isSignedIn = (user.isPresent()) && commonCommands.contains(command);
-        boolean needToSignIn = (!user.isPresent()) &&
-                (clientCommands.contains(command) || adminCommands.contains(command));
-
-        if (isAdmin || isClient || isGuest) {
-            request.setAttribute("command", command);
+        if (hasAccessToCommon() || hasAdminAccess() || hasClientAccess()) {
+            request.setAttribute(COMMAND_ATTRIBUTE, command);
+        } else {
+            request.setAttribute(COMMAND_ATTRIBUTE, LOGIN_PAGE);
         }
 
-        if (isSignedIn || (isPagePresent && uri.equals("/hotel/home/"))) {
-            if (user.get().getRole() == Role.ADMIN) {
-                request.setAttribute("command", ADMIN_HOME_PAGE);
-            } else {
-                request.setAttribute("command", CLIENT_HOME_PAGE);
-            }
-        }
+        if (isRequireNotClientCommands())
+            request.setAttribute(COMMAND_ATTRIBUTE, CLIENT_HOME_PAGE);
 
-        if (isSignedIn || (isPagePresent && uri.equals("/hotel/bills/"))) {
-                request.setAttribute("command", CLIENT_BILLS_PAGE);
-        }
+        if (isRequireNotAdminCommands())
 
-        if (needToSignIn) {
-            request.setAttribute("command", LOGIN_PAGE);
-        }
+
+
+            request.setAttribute(COMMAND_ATTRIBUTE, ADMIN_HOME_PAGE);
+
+
+        if (page != null)
+            createCommandForPagination(request);
 
         filterChain.doFilter(request, servletResponse);
     }
@@ -91,5 +83,43 @@ public class RequestLoginFilter implements Filter {
     @Override
     public void destroy() {
 
+    }
+
+    private void createCommandForPagination(HttpServletRequest request) {
+        if (uri.matches("/hotel/home/")) {
+            if (user.get().getRole().equals(Role.ADMIN)) {
+                request.setAttribute(COMMAND_ATTRIBUTE, ADMIN_HOME_PAGE);
+            } else {
+                request.setAttribute(COMMAND_ATTRIBUTE, CLIENT_HOME_PAGE);
+            }
+        }
+
+        if (uri.matches("/hotel/bills/")) {
+            request.setAttribute(COMMAND_ATTRIBUTE, CLIENT_BILLS_PAGE);
+        }
+    }
+
+    private boolean hasAccessToCommon() {
+        return !user.isPresent() && commonCommands.contains(command);
+    }
+
+    private boolean hasClientAccess() {
+        return (user.isPresent()) && user.get().getRole().equals(Role.CLIENT)
+                && clientCommands.contains(command);
+    }
+
+    private boolean hasAdminAccess() {
+        return (user.isPresent()) && user.get().getRole().equals(Role.ADMIN)
+                && adminCommands.contains(command);
+    }
+
+    private boolean isRequireNotClientCommands() {
+        return user.isPresent() && user.get().getRole().equals(Role.CLIENT)
+                && !clientCommands.contains(command);
+    }
+
+    private boolean isRequireNotAdminCommands() {
+        return user.isPresent() && user.get().getRole().equals(Role.ADMIN)
+                && !adminCommands.contains(command);
     }
 }

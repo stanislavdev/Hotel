@@ -64,7 +64,7 @@ public class CommandFactory {
             case REJECT_ORDER:
                 return new RejectOrderCommand();
             default:
-                return new LoginPageCommand();
+                return new UnknownCommand();
         }
     }
 }

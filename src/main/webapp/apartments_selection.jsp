@@ -55,7 +55,7 @@
             <fmt:message bundle="${msg}" key="admin.buttons.send-bill"/>
         </button>
     </form>
-    <form method="post" action="/hotel/bills">
+    <form method="post" action="/hotel/home">
         <input type="hidden" name="command" value="reject-order"/>
         <button class="btn waves-effect waves-light red lighten-1" type="submit">
             <fmt:message bundle="${msg}" key="admin.buttons.reject"/>

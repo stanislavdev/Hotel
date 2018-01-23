@@ -10,6 +10,7 @@ public interface Command {
     String REGISTRATION_PAGE_JSP = "/registration_page.jsp";
     String APARTMENTS_FOR_ORDER = "/apartments_selection.jsp";
     String CLIENT_BILLS_JSP = "/bills_page.jsp";
+    String ERROR_PAGE = "/error_page.jsp";
 
     String execute(HttpServletRequest request, HttpServletResponse response);
 }

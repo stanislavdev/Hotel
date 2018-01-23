@@ -14,7 +14,7 @@
            <h4><fmt:message bundle="${msg}" key="registration.title"/></h4>
      </span>
     <form action="/" method="post">
-        <input type="hidden" name="command" value="client_home_page">
+        <input type="hidden" name="command" value="login_page">
         <button class="btn-floating btn-large waves-effect waves-light blue left" type="submit">
             <img src="/css/ic_home_white_24dp_1x.png">
         </button>

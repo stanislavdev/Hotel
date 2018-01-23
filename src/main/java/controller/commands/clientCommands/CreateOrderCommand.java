@@ -3,7 +3,9 @@ package controller.commands.clientCommands;
 import controller.commands.Command;
 import controller.commands.CommandFactory;
 import model.entities.ApartmentType;
+import model.services.ApartmentService;
 import model.services.OrderService;
+import model.services.impl.ApartmentServiceImpl;
 import model.services.impl.OrderServiceImpl;
 import org.apache.log4j.Logger;
 
@@ -16,6 +18,7 @@ import static model.util.Constants.*;
 
 public class CreateOrderCommand implements Command {
     private OrderService orderService = OrderServiceImpl.getInstance();
+    private ApartmentService apartmentService = ApartmentServiceImpl.getInstance();
 
     private static final Logger LOGGER = Logger.getLogger(CreateOrderCommand.class);
 

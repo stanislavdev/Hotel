@@ -14,7 +14,7 @@
        <h5><fmt:message bundle="${msg}" key="sign-in.title"/></h5>
    </span>
     <div class="col l12 right">
-        <form action="/hotel/locale">
+        <form action="/">
             <input type="hidden" name="command" value="change-locale">
             <input type="hidden" name="currentPage" value="/sign_in_page.jsp">
             <select class="browser-default  blue right" name="language" onclick="this.form.submit()">
