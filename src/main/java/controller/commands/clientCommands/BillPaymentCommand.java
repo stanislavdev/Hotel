@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import static model.util.Constants.BILL_ID_ATTRIBUTE;
+import static model.util.Constants.REDIRECT_TO;
 import static model.util.Constants.USER_ID_ATTRIBUTE;
 
 public class BillPaymentCommand implements Command {
@@ -22,6 +23,6 @@ public class BillPaymentCommand implements Command {
         int billId = Integer.parseInt(request.getParameter(BILL_ID_ATTRIBUTE));
         billService.updateBillToPaid(billId);
         LOGGER.info("Client " + request.getSession().getAttribute(USER_ID_ATTRIBUTE) + " pay bill" + billId);
-        return "redirect:" + CommandFactory.CLIENT_BILLS_PAGE;
+        return REDIRECT_TO + CommandFactory.CLIENT_BILLS_PAGE;
     }
 }

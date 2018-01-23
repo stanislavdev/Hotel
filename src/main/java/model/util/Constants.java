@@ -1,6 +1,7 @@
 package model.util;
 
 public interface Constants {
+    String REDIRECT_TO = "redirect:";
     String USER_ID_ATTRIBUTE = "userId";
     String ORDER_ID_ATTRIBUTE = "orderId";
     String BILL_ID_ATTRIBUTE = "billId";

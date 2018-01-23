@@ -31,10 +31,10 @@ public class SignInCommand implements Command {
             request.getSession().setAttribute(USER_ID_ATTRIBUTE, user.get().getId());
             if (user.get().getRole().equals(Role.ADMIN)) {
                 LOGGER.info("Admin " + user.get().getId() + " sign in");
-                return "redirect:" + CommandFactory.ADMIN_HOME_PAGE;
+                return REDIRECT_TO + CommandFactory.ADMIN_HOME_PAGE;
             } else {
                 LOGGER.info("Client " + user.get().getId() + " sign in");
-                return "redirect:" + CommandFactory.CLIENT_HOME_PAGE;
+                return REDIRECT_TO + CommandFactory.CLIENT_HOME_PAGE;
             }
         } else {
             request.setAttribute(EXCEPTION_ATTRIBUTE, EXCEPTION_ATTRIBUTE);

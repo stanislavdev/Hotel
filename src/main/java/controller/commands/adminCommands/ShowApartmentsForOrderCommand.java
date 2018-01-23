@@ -26,7 +26,7 @@ public class ShowApartmentsForOrderCommand implements Command {
         orderId = request.getParameter(ORDER_ID_ATTRIBUTE);
         if (orderId == null) {
             request.setAttribute(EXCEPTION_ATTRIBUTE, EXCEPTION_ATTRIBUTE);
-            return "redirect:" + CommandFactory.ADMIN_HOME_PAGE;
+            return REDIRECT_TO + CommandFactory.ADMIN_HOME_PAGE;
         }
         setApartmentAttributes(request);
         return APARTMENTS_FOR_ORDER;

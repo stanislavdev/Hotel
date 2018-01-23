@@ -53,7 +53,7 @@ public class RequestLoginFilter implements Filter {
         String page = request.getParameter("page");
         Optional<User> user = userService.getUserFromSessionById(request);
 
-        boolean isPage = (page != null);
+        boolean isPagePresent = (page != null);
 
         boolean isGuest = (!user.isPresent()) && commonCommands.contains(command);
         boolean isAdmin = (user.isPresent()) && user.get().getRole().equals(Role.ADMIN) &&
@@ -69,7 +69,7 @@ public class RequestLoginFilter implements Filter {
             request.setAttribute("command", command);
         }
 
-        if (isSignedIn || (isPage && uri.equals("/hotel/home/"))) {
+        if (isSignedIn || (isPagePresent && uri.equals("/hotel/home/"))) {
             if (user.get().getRole() == Role.ADMIN) {
                 request.setAttribute("command", ADMIN_HOME_PAGE);
             } else {
@@ -77,7 +77,7 @@ public class RequestLoginFilter implements Filter {
             }
         }
 
-        if (isSignedIn || (isPage && uri.equals("/hotel/bills/"))) {
+        if (isSignedIn || (isPagePresent && uri.equals("/hotel/bills/"))) {
                 request.setAttribute("command", CLIENT_BILLS_PAGE);
         }
 

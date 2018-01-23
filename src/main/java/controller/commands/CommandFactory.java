@@ -10,6 +10,7 @@ import controller.commands.clientCommands.BillsPageCommand;
 import controller.commands.clientCommands.ClientHomePageCommand;
 import controller.commands.clientCommands.CreateOrderCommand;
 import controller.commands.commonCommands.*;
+import model.services.impl.UserServiceImpl;
 
 public class CommandFactory {
     public static final String SIGN_IN = "sign_in";
@@ -43,7 +44,7 @@ public class CommandFactory {
             case REGISTRATION_PAGE:
                 return new SignUpPageCommand();
             case REGISTRATION:
-                return new SignUpCommand();
+                return new SignUpCommand(UserServiceImpl.getInstance());
             case SIGN_OUT:
                 return new SignOutCommand();
             case ADMIN_HOME_PAGE:

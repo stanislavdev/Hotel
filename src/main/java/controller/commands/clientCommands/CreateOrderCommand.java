@@ -30,11 +30,11 @@ public class CreateOrderCommand implements Command {
         init(request);
         if (!isValidDate(dateFrom, dateTo)) {
             request.setAttribute(EXCEPTION_ATTRIBUTE, "wrongDateException");
-            return "redirect:" + CommandFactory.CLIENT_HOME_PAGE;
+            return REDIRECT_TO + CommandFactory.CLIENT_HOME_PAGE;
         }
         createOrdersList(request);
         LOGGER.info("Client " + clientId + " create new order");
-        return "redirect:" + CommandFactory.CLIENT_HOME_PAGE;
+        return REDIRECT_TO + CommandFactory.CLIENT_HOME_PAGE;
     }
 
     private boolean isValidDate(String dateFrom, String dateTo) {

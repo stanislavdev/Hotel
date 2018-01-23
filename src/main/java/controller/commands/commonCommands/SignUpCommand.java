@@ -15,7 +15,11 @@ import static model.util.Constants.*;
 
 public class SignUpCommand implements Command {
 
-    private UserService userService = UserServiceImpl.getInstance();
+    private UserService userService;/* = UserServiceImpl.getInstance();*/
+
+    public SignUpCommand(UserService userService) {
+        this.userService = userService;
+    }
 
     private String email;
     private String password;
@@ -31,7 +35,7 @@ public class SignUpCommand implements Command {
             userService.signUp(user);
             request.getSession().setAttribute(USER_ID_ATTRIBUTE, user.getId());
             LOGGER.info("Client " + user.getId() + " has registered");
-            return "redirect:" + CommandFactory.CLIENT_HOME_PAGE;
+            return REDIRECT_TO + CommandFactory.CLIENT_HOME_PAGE;
         } else {
             request.setAttribute(EXCEPTION_ATTRIBUTE, INPUT_DATA_EXCEPTION);
             return REGISTRATION_PAGE_JSP;

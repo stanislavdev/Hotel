@@ -23,9 +23,7 @@ import java.sql.SQLException;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
-import static model.util.Constants.APARTMENT_ID_ATTRIBUTE;
-import static model.util.Constants.ORDER_ID_ATTRIBUTE;
-import static model.util.Constants.USER_ID_ATTRIBUTE;
+import static model.util.Constants.*;
 
 public class SendBillCommand implements Command {
     private OrderService orderService = OrderServiceImpl.getInstance();
@@ -51,7 +49,7 @@ public class SendBillCommand implements Command {
         billService.createNewBill(bill);
         LOGGER.info("Admin " + request.getSession().getAttribute(USER_ID_ATTRIBUTE) +
                 " send bill for order " + orderId);
-        return "redirect:" + CommandFactory.ADMIN_HOME_PAGE;
+        return REDIRECT_TO + CommandFactory.ADMIN_HOME_PAGE;
     }
 
     private void init(HttpServletRequest request) {

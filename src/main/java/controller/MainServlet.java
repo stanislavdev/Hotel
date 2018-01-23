@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import static model.util.Constants.REDIRECT_TO;
+
 @WebServlet(urlPatterns = "/hotel/*")
 public class MainServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -28,8 +30,8 @@ public class MainServlet extends HttpServlet {
         String commandAttribute = (String) request.getAttribute("command");
         Command command = CommandFactory.createCommand(commandAttribute);
         String page = command.execute(request, response);
-        if (page.startsWith("redirect:")) {
-            request.setAttribute("command", page.replace("redirect:", ""));
+        if (page.startsWith(REDIRECT_TO)) {
+            request.setAttribute("command", page.replace(REDIRECT_TO, ""));
             processRequest(request, response);
         } else {
             RequestDispatcher dispatcher = request.getRequestDispatcher(page);

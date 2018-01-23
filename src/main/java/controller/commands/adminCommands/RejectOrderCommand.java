@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import static model.util.Constants.ORDER_ID_ATTRIBUTE;
+import static model.util.Constants.REDIRECT_TO;
 import static model.util.Constants.USER_ID_ATTRIBUTE;
 
 public class RejectOrderCommand implements Command {
@@ -22,6 +23,6 @@ public class RejectOrderCommand implements Command {
         String orderId = String.valueOf(request.getSession().getAttribute(ORDER_ID_ATTRIBUTE));
         orderService.rejectOrderById(Integer.parseInt(orderId));
         LOGGER.info("Admin " + request.getSession().getAttribute(USER_ID_ATTRIBUTE) + " reject order " + orderId);
-        return "redirect:" + CommandFactory.ADMIN_HOME_PAGE;
+        return REDIRECT_TO + CommandFactory.ADMIN_HOME_PAGE;
     }
 }
