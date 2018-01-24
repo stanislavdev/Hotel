@@ -5,12 +5,18 @@ public class Bill {
     private User admin;
     private Order order;
     private int price;
+    private int isPaid;
+    private int adminId;
+    private int orderId;
 
     private Bill(BillBuilder billBuilder) {
         this.id = billBuilder.id;
         this.admin = billBuilder.admin;
         this.order = billBuilder.order;
         this.price = billBuilder.price;
+        this.isPaid = billBuilder.isPaid;
+        this.adminId = billBuilder.adminId;
+        this.orderId = billBuilder.orderId;
     }
 
     public int getId() {
@@ -45,14 +51,56 @@ public class Bill {
         this.price = price;
     }
 
+    public int getIsPaid() {
+        return isPaid;
+    }
+
+    public void setIsPaid(int isPaid) {
+        this.isPaid = isPaid;
+    }
+
+    public int getAdminId() {
+        return adminId;
+    }
+
+    public void setAdminId(int adminId) {
+        this.adminId = adminId;
+    }
+
+    public int getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(int orderId) {
+        this.orderId = orderId;
+    }
+
     public static class BillBuilder {
         private int id;
         private User admin;
         private Order order;
         private int price;
+        private int isPaid;
+        private int adminId;
+        private int orderId;
 
         public BillBuilder id(int id) {
             this.id = id;
+            return this;
+        }
+
+        public BillBuilder adminId(int adminId) {
+            this.adminId = adminId;
+            return this;
+        }
+
+        public BillBuilder orderId(int orderId) {
+            this.orderId = orderId;
+            return this;
+        }
+
+        public BillBuilder isPaid(int isPaid){
+            this.isPaid = isPaid;
             return this;
         }
 

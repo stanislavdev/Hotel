@@ -5,11 +5,12 @@ import java.util.List;
 
 public class Order {
     private int id;
-    private int numberOfRooms;
+    private String numberOfRooms;
     private ApartmentType apartmentType;
     private Date dateFrom;
     private Date dateTo;
     private int accepted;
+    private int clientId;
     private User client;
     private List<Apartment> apartments;
 
@@ -23,6 +24,7 @@ public class Order {
         this.accepted = orderBuilder.accepted;
         this.client = orderBuilder.client;
         this.apartments = orderBuilder.apartments;
+        this.clientId = orderBuilder.clientId;
     }
 
     public int getId() {
@@ -33,11 +35,11 @@ public class Order {
         this.id = id;
     }
 
-    public int getNumberOfRooms() {
+    public String getNumberOfRooms() {
         return numberOfRooms;
     }
 
-    public void setNumberOfRooms(int numberOfRooms) {
+    public void setNumberOfRooms(String numberOfRooms) {
         this.numberOfRooms = numberOfRooms;
     }
 
@@ -89,13 +91,38 @@ public class Order {
         this.apartments = apartments;
     }
 
+    public int getClientId() {
+        return clientId;
+    }
+
+    public void setClientId(int clientId) {
+        this.clientId = clientId;
+    }
+
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "id=" + id +
+                ", numberOfRooms=" + numberOfRooms +
+                ", apartmentType=" + apartmentType +
+                ", dateFrom=" + dateFrom +
+                ", dateTo=" + dateTo +
+                ", accepted=" + accepted +
+                ", clientId=" + clientId +
+                ", client=" + client +
+                ", apartments=" + apartments +
+                '}';
+    }
+
     public static class OrderBuilder{
         private int id;
-        private int numberOfRooms;
+        private String numberOfRooms;
         private ApartmentType apartmentType;
         private Date dateFrom;
         private Date dateTo;
         private int accepted;
+        private int clientId;
         private User client;
         private List<Apartment> apartments;
 
@@ -104,7 +131,7 @@ public class Order {
             return this;
         }
 
-        public OrderBuilder numberOfRooms(int numberOfRooms){
+        public OrderBuilder numberOfRooms(String numberOfRooms){
             this.numberOfRooms = numberOfRooms;
             return this;
         }
@@ -129,6 +156,10 @@ public class Order {
             return this;
         }
 
+        public OrderBuilder clintId(int clientId){
+            this.clientId = clientId;
+            return this;
+        }
         public OrderBuilder client(User client){
             this.client = client;
             return this;

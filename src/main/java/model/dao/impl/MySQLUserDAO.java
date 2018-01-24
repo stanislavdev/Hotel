@@ -23,10 +23,10 @@ public class MySQLUserDAO implements UserDAO {
 
     private static String SELECT_ALL_USERS = "SELECT * FROM users";
     private static String SELECT_USER_BY_ID = "SELECT * FROM users WHERE id = ?";
-    private static String INSERT_USER = "INSERT INTO users (id, email, password, role) VALUES (?, ?, ?, ?)";
+    private static String INSERT_USER = "INSERT INTO users (email, password, role) VALUES (?, ?, ?)";
     private static String UPDATE_USER = "UPDATE users SET password = ? WHERE id = ?";
     private static String SELECT_USER_BY_EMAIL_AND_PASSWORD = "SELECT * FROM users WHERE email = ? AND password = ?";
-
+    private static String SELECT_USER_BY_EMAIL = "SELECT * FROM users WHERE email = ?";
     private static final Logger LOGGER = Logger.getLogger(MySQLUserDAO.class);
 
     MySQLUserDAO(Connection connection) {
@@ -39,6 +39,23 @@ public class MySQLUserDAO implements UserDAO {
             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_USER_BY_EMAIL_AND_PASSWORD);
             preparedStatement.setString(1, email);
             preparedStatement.setString(2, password);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return Optional.of(parseUser(resultSet));
+            } else {
+                return Optional.empty();
+            }
+        } catch (SQLException e) {
+            LOGGER.error(e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public Optional<User> getUserByEmail(String email) {
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_USER_BY_EMAIL);
+            preparedStatement.setString(1, email);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 return Optional.of(parseUser(resultSet));
@@ -81,13 +98,12 @@ public class MySQLUserDAO implements UserDAO {
     }
 
     @Override
-    public boolean insert(User item) {
+    public boolean insert(User object) {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_USER);
-            preparedStatement.setInt(1, item.getId());
-            preparedStatement.setString(2, item.getEmail());
-            preparedStatement.setString(3, item.getPassword());
-            preparedStatement.setString(4, item.getRole().toString());
+            preparedStatement.setString(1, object.getEmail());
+            preparedStatement.setString(2, object.getPassword());
+            preparedStatement.setString(3, String.valueOf(object.getRole()));
             return preparedStatement.executeUpdate() > 0;
         } catch (SQLException e) {
             LOGGER.error(e);
@@ -96,11 +112,11 @@ public class MySQLUserDAO implements UserDAO {
     }
 
     @Override
-    public boolean update(User item) {
+    public boolean update(User object) {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_USER);
-            preparedStatement.setString(1, item.getPassword());
-            preparedStatement.setInt(2, item.getId());
+            preparedStatement.setString(1, object.getPassword());
+            preparedStatement.setInt(2, object.getId());
             return preparedStatement.executeUpdate() > 0;
         } catch (SQLException e) {
             LOGGER.error(e);
@@ -114,7 +130,7 @@ public class MySQLUserDAO implements UserDAO {
                     .id(resultSet.getInt(ID))
                     .email(resultSet.getString(EMAIL))
                     .password(resultSet.getString(PASSWORD))
-                    .role(resultSet.getString(ROLE))
+                    .role(resultSet.getString(ROLE).toUpperCase())
                     .build();
         } catch (SQLException e) {
             LOGGER.error(e);
@@ -123,14 +139,23 @@ public class MySQLUserDAO implements UserDAO {
     }
 
     private List<User> parseUserList(ResultSet resultSet) {
+        List<User> userList = new ArrayList<>();
         try {
-            List<User> userList = new ArrayList<>();
             while (resultSet.next()) {
                 userList.add(parseUser(resultSet));
             }
             return userList;
         } catch (SQLException e) {
             LOGGER.error(e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void close() {
+        try {
+            connection.close();
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
