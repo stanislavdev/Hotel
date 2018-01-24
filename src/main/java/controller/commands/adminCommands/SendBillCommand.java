@@ -42,6 +42,10 @@ public class SendBillCommand implements Command {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
         init(request);
+        if (apartmentId == null) {
+            request.setAttribute(EXCEPTION_ATTRIBUTE, EXCEPTION_ATTRIBUTE);
+            return APARTMENTS_FOR_ORDER;
+        }
         countOrderPrice();
         createBill(request);
         orderService.updateToAccepted(order);

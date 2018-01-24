@@ -51,9 +51,22 @@
             </c:forEach>
         </table>
         <br><br>
-        <button class="btn waves-effect waves-light" type="submit">
-            <fmt:message bundle="${msg}" key="admin.buttons.send-bill"/>
-        </button>
+        <div class="row">
+            <div class="col l7">
+                <button class="btn waves-effect waves-light" type="submit">
+                    <fmt:message bundle="${msg}" key="admin.buttons.send-bill"/>
+                </button>
+            </div>
+            <div class="col l7">
+                <c:if test="${requestScope.exception ne null}">
+                    <h6 class="left">
+                            <span class="flow-text red-text">
+                                 <fmt:message bundle="${msg}" key="admin.select-apartment-exception"/>
+                             </span>
+                    </h6>
+                </c:if>
+            </div>
+        </div>
     </form>
     <form method="post" action="/hotel/home">
         <input type="hidden" name="command" value="reject-order"/>

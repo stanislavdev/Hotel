@@ -6,7 +6,7 @@ import model.dao.impl.MySQLFactoryDAO;
 import java.sql.Connection;
 
 public abstract class FactoryDAO {
-    private static FactoryDAO FACTORY_DAO_INSTANCE;
+    private static volatile FactoryDAO FACTORY_DAO_INSTANCE;
 
     public abstract UserDAO getUserDAO();
 

@@ -1,11 +1,7 @@
-import controller.commands.Command;
 import controller.commands.CommandFactory;
 import controller.commands.commonCommands.SignUpCommand;
-import model.entities.Role;
 import model.entities.User;
 import model.services.UserService;
-import model.services.impl.UserServiceImpl;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -18,8 +14,8 @@ import javax.servlet.http.HttpSession;
 
 import java.util.Optional;
 
-import static model.util.Constants.EMAIL_REGISTRATION_ATTRIBUTE;
-import static model.util.Constants.PASSWORD_REGISTRATION_ATTRIBUTE;
+import static controller.commands.Command.REGISTRATION_PAGE_JSP;
+import static model.util.Constants.*;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
@@ -39,10 +35,9 @@ public class SignUpCommandTester {
     private SignUpCommand signUpCommand = new SignUpCommand(userService);
 
     @Test
-    public void signUpCommand() {
+    public void correctSignUpCommand() {
         String email = "email@gmail.com";
         String password = "qwerty";
-        int id = 1;
 
         when(request.getParameter(EMAIL_REGISTRATION_ATTRIBUTE)).thenReturn(email);
         when(request.getParameter(PASSWORD_REGISTRATION_ATTRIBUTE)).thenReturn(password);
@@ -50,12 +45,44 @@ public class SignUpCommandTester {
 
         when(user.getEmail()).thenReturn(email);
         when(user.getPassword()).thenReturn(password);
-        when(user.getId()).thenReturn(id);
 
         doNothing().when(userService).signUp(any());
         when(userService.getUserByEmail(any())).thenReturn(Optional.empty());
 
         String path = signUpCommand.execute(request, response);
         assertEquals("redirect:" + CommandFactory.CLIENT_HOME_PAGE, path);
+    }
+
+    @Test
+    public void incorrectEmailSignUpCommand() {
+        String email = "emailgmail.com";
+        String password = "qwerty";
+
+        when(request.getParameter(EMAIL_REGISTRATION_ATTRIBUTE)).thenReturn(email);
+        when(request.getParameter(PASSWORD_REGISTRATION_ATTRIBUTE)).thenReturn(password);
+        when(request.getSession()).thenReturn(session);
+
+        when(user.getEmail()).thenReturn(email);
+        when(user.getPassword()).thenReturn(password);
+        when(userService.getUserByEmail(any())).thenReturn(Optional.empty());
+
+        String path = signUpCommand.execute(request, response);
+        assertEquals(REGISTRATION_PAGE_JSP, path);
+    }
+
+
+    @Test
+    public void existUserSignUpCommand() {
+        String email = "email@gmail.com";
+        String password = "qwerty";
+
+        when(request.getParameter(EMAIL_REGISTRATION_ATTRIBUTE)).thenReturn(email);
+        when(request.getParameter(PASSWORD_REGISTRATION_ATTRIBUTE)).thenReturn(password);
+        when(request.getSession()).thenReturn(session);
+
+        when(userService.getUserByEmail(any())).thenReturn(Optional.of(user));
+
+        String path = signUpCommand.execute(request, response);
+        assertEquals(REGISTRATION_PAGE_JSP, path);
     }
 }

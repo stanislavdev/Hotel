@@ -16,12 +16,15 @@ import static model.util.Constants.*;
 
 
 public class SignInCommand implements Command {
-    private UserService userService = UserServiceImpl.getInstance();
-
+    private UserService userService;
     private String email;
     private String password;
 
     private static final Logger LOGGER = Logger.getLogger(SignInCommand.class);
+
+    public SignInCommand(UserService userService){
+        this.userService = userService;
+    }
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {

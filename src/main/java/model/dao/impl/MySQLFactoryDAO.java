@@ -19,7 +19,7 @@ public class MySQLFactoryDAO extends FactoryDAO {
             InitialContext initialContext = new InitialContext();
             dataSource = (DataSource) initialContext.lookup("java:/comp/env/jdbc/hotel");
         } catch (NamingException e) {
-            LOGGER.error("Error of looking up the data source: ", e);
+            LOGGER.error(e);
             throw new RuntimeException(e);
         }
     }
@@ -28,7 +28,7 @@ public class MySQLFactoryDAO extends FactoryDAO {
         try {
             return dataSource.getConnection();
         } catch (SQLException e) {
-            LOGGER.error("Error of getting connection from connection pool: ", e);
+            LOGGER.error(e);
             throw new RuntimeException(e);
         }
     }

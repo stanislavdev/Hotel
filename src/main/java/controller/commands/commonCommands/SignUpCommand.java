@@ -15,7 +15,7 @@ import static model.util.Constants.*;
 
 public class SignUpCommand implements Command {
 
-    private UserService userService;/* = UserServiceImpl.getInstance();*/
+    private UserService userService;
 
     public SignUpCommand(UserService userService) {
         this.userService = userService;

@@ -36,7 +36,7 @@ public class CommandFactory {
 
         switch (command) {
             case SIGN_IN:
-                return new SignInCommand();
+                return new SignInCommand(UserServiceImpl.getInstance());
             case CHANGE_LOCALE:
                 return new LocaleCommand();
             case LOGIN_PAGE:

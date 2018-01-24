@@ -9,6 +9,7 @@ import java.util.Locale;
 import static model.util.Constants.LOCALE_ATTRIBUTE;
 
 public class LocaleCommand implements Command {
+
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
         String lang = request.getParameter("language");
