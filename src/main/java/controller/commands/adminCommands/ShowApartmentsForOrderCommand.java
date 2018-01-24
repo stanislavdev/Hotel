@@ -17,25 +17,25 @@ import static model.util.Constants.*;
 
 public class ShowApartmentsForOrderCommand implements Command {
     private ApartmentService apartmentService = ApartmentServiceImpl.getInstance();
-    private OrderService orderService = OrderServiceImpl.getInstance();
 
-    private String orderId;
+    private String sOrderId;
+    private List<Apartment> apartmentList;
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
-        orderId = request.getParameter(ORDER_ID_ATTRIBUTE);
-        if (orderId == null) {
+        sOrderId = request.getParameter(ORDER_ID_ATTRIBUTE);
+        if (sOrderId == null) {
             request.setAttribute(EXCEPTION_ATTRIBUTE, EXCEPTION_ATTRIBUTE);
             return REDIRECT_TO + CommandFactory.ADMIN_HOME_PAGE;
         }
+        int orderId = Integer.parseInt(sOrderId);
+        apartmentList = apartmentService.showAvailableApartments(orderId);
         setApartmentAttributes(request);
         return APARTMENTS_FOR_ORDER;
     }
 
     private void setApartmentAttributes(HttpServletRequest request) {
-        Order order = orderService.getById(Integer.parseInt(orderId)).get();
-        List<Apartment> apartmentList = apartmentService.showAvailableApartments(order);
-        request.getSession().setAttribute(ORDER_ID_ATTRIBUTE, orderId);
+        request.getSession().setAttribute(ORDER_ID_ATTRIBUTE, sOrderId);
         request.getSession().setAttribute(APARTMENTS_ATTRIBUTE, apartmentList);
     }
 }

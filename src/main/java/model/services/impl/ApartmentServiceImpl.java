@@ -2,6 +2,7 @@ package model.services.impl;
 
 import model.dao.ApartmentDAO;
 import model.dao.FactoryDAO;
+import model.dao.OrderDAO;
 import model.dao.impl.MySQLFactoryDAO;
 import model.entities.Apartment;
 import model.entities.Order;
@@ -26,8 +27,10 @@ public class ApartmentServiceImpl implements ApartmentService {
     }
 
     @Override
-    public List<Apartment> showAvailableApartments(Order order) {
+    public List<Apartment> showAvailableApartments(int orderId) {
         ApartmentDAO apartmentDAO = factoryDAO.getApartmentDAO();
+        OrderDAO orderDAO = factoryDAO.getOrderDAO();
+        Order order = orderDAO.getById(orderId).get();
         List<Apartment> apartmentList = apartmentDAO.showAvailable(order);
         apartmentDAO.close();
         return apartmentList;

@@ -1,5 +1,6 @@
 package model.services;
 
+import model.entities.Apartment;
 import model.entities.ApartmentType;
 import model.entities.Order;
 import model.entities.User;
@@ -21,4 +22,5 @@ public interface OrderService {
     int getTotalNumberOfOrders();
     int getNumberOfOrdersByClientId(int id);
     void rejectOrderById(int id);
+    int countOrderPrice(Order order, Apartment apartment);
 }

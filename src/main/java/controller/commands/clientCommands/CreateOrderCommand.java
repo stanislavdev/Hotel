@@ -18,7 +18,6 @@ import static model.util.Constants.*;
 
 public class CreateOrderCommand implements Command {
     private OrderService orderService = OrderServiceImpl.getInstance();
-    private ApartmentService apartmentService = ApartmentServiceImpl.getInstance();
 
     private static final Logger LOGGER = Logger.getLogger(CreateOrderCommand.class);
 

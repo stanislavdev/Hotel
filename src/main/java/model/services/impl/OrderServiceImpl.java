@@ -2,8 +2,10 @@ package model.services.impl;
 
 import model.dao.FactoryDAO;
 import model.dao.OrderDAO;
+import model.entities.Apartment;
 import model.entities.ApartmentType;
 import model.entities.Order;
+import model.services.ApartmentService;
 import model.services.OrderService;
 import org.apache.log4j.Logger;
 
@@ -12,6 +14,7 @@ import java.sql.Date;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 public class OrderServiceImpl implements OrderService {
     private FactoryDAO factoryDAO;
@@ -130,5 +133,17 @@ public class OrderServiceImpl implements OrderService {
         OrderDAO orderDAO = factoryDAO.getOrderDAO();
         orderDAO.rejectOrderById(id);
         orderDAO.close();
+    }
+
+    @Override
+    public int countOrderPrice(Order order, Apartment apartment) {
+        ApartmentService apartmentService = ApartmentServiceImpl.getInstance();
+        apartment = apartmentService.getById(apartment.getId()).get();
+        Date dateFrom = order.getDateFrom();
+        Date dateTo = order.getDateTo();
+        long days = dateTo.getTime() - dateFrom.getTime();
+        long convertDays = TimeUnit.DAYS.convert(days, TimeUnit.MILLISECONDS);
+        int pricePerDay = (apartment.getPrice());
+        return Math.toIntExact(convertDays * pricePerDay);
     }
 }

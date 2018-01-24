@@ -17,8 +17,6 @@ import static model.util.Constants.*;
 
 public class BillsPageCommand implements Command, Pagination {
     private BillServiceImpl billService = BillServiceImpl.getInstance();
-    private OrderServiceImpl orderService = OrderServiceImpl.getInstance();
-    private UserServiceImpl userService = UserServiceImpl.getInstance();
 
     private int userId;
 
@@ -26,7 +24,9 @@ public class BillsPageCommand implements Command, Pagination {
     public String execute(HttpServletRequest request, HttpServletResponse response) {
         userId = (int) request.getSession().getAttribute(USER_ID_ATTRIBUTE);
         setAttributeForPagination(request);
-        createBillsList(request);
+        List<Bill> billList = billService.getFilledBillsList(Pagination.getPageId(request),
+                NUMBER_OF_ENTRIES_FOR_ONE_PAGE, userId);
+        request.getSession().setAttribute(BILLS_ATTRIBUTE, billList);
         return CLIENT_BILLS_JSP;
     }
 
@@ -37,17 +37,5 @@ public class BillsPageCommand implements Command, Pagination {
         } else {
             request.setAttribute(COUNT_OF_BILLS_ATTRIBUTE, (size / NUMBER_OF_ENTRIES_FOR_ONE_PAGE) + 1);
         }
-    }
-
-    private void createBillsList(HttpServletRequest request) {
-        List<Bill> billList = billService.getBillsByClientId(Pagination.getPageId(request),
-                NUMBER_OF_ENTRIES_FOR_ONE_PAGE, userId);
-        for (Bill bill : billList) {
-            Order order = orderService.getById(bill.getOrderId()).get();
-            User user = userService.getById(bill.getAdminId()).get();
-            bill.setOrder(order);
-            bill.setAdmin(user);
-        }
-        request.getSession().setAttribute(BILLS_ATTRIBUTE, billList);
     }
 }
