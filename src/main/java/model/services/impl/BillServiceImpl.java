@@ -80,11 +80,10 @@ public class BillServiceImpl implements BillService {
     }
 
     @Override
-    public boolean updateBillToPaid(int id) {
+    public void updateBillToPaid(int id) {
         BillDAO billDAO = factoryDAO.getBillDAO();
-        boolean isUpdate = billDAO.updateBillToPaid(id);
+        billDAO.updateBillToPaid(id);
         billDAO.close();
-        return isUpdate;
     }
 
     @Override
