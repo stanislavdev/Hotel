@@ -1,42 +1,27 @@
-# 20.Система Заказ гостиницы. 
-Клиент заполняет Заявку, указывая количество мест в номере, класс апартаментов и время пребывания.
-Администратор просматривает поступившую Заявку, выделяет наиболее
-подходящий из доступных Номеров, после чего система выставляет Счет
-Клиенту.
+# 20.System Hotel reservation
+The client fills out the Application, indicating the number of beds in the room, the class of the apartment and the time of stay. The Administrator reviews the received Application, selects the most suitable of the available Numbers, after which the system invoices the Customer.
 
-#### Необходимо построить веб-приложение, поддерживающую следующуюфункциональность:
-1. На основе сущностей предметной области создать классы их
-описывающие.
-2. Классы и методы должны иметь отражающую их функциональность
-названия и должны быть грамотно структурированы по пакетам
-3. Информацию о предметной области хранить в БД, для доступа
-использовать API JDBC с использованием пула соединений,
-стандартного или разработанного самостоятельно. В качестве СУБД
-рекомендуется MySQL.
-4. Приложение должно поддерживать работу с кириллицей (быть
-многоязычной), в том числе и при хранении информации в БД.
-5. Код должен быть документирован.
-6. Приложение должно быть покрыто Юнит-тестами
-7. При разработке бизнес логики использовать сессии и фильтры, и
-события в системе обрабатывать с помощью Log4j.
-8. В приложении необходимо реализовать Pagination, Transaction в
-зависимости от Вашего проекта
-9. Используя сервлеты и JSP, реализовать функциональности,
-предложенные в постановке конкретной задачи.
-10. В страницах JSP применять библиотеку JSTL
-11. Приложение должно корректно реагировать на ошибки и исключения
-разного рода (Пользователь никогда не должен видеть stack-trace на
-стороне front-end).
-12. В приложении должна быть реализована система Авторизации и
-Аутентификации
+#### You need to build a web application that supports the following functionality:
+1. Based on the entities of the domain, create classes that describe them.
+2. Classes and methods must have a name reflecting their functionality and must be properly structured by package.
+3. Information about the subject area is stored in the database, for access, use the JDBC API using a connection pool, standard or developed independently. MySQL is recommended as a DBMS.
+4. The application must support Cyrillic alphabet (be multilingual), including storing information in the database.
+5. The code must be documented.
+6. The application must be covered by unit tests.
+7. When developing business logic, use sessions and filters and process events in the system using Log4j.
+8. In the application you need to implement Pagination, Transaction, depending on your project.
+9. Use servlets and JSP, to implement the functionality proposed in the formulation of a specific task.
+10. Use JSTL in JSP pages
+11. The application should react correctly to errors and exceptions of various kinds (the User should never see the stack-trace on the front-end side).
+12. The application must have an Authorization and Authentication system
 
-#### Инструкция по установке:
-1. Клонирование/загрузка этого репозитория
-2. Дамп базы данных находится в папке hotelDump
-3. Запуск Apache Tomcat
+#### Installation Instructions:
+1. Clone / download this repository
+2. Database dump is located in the hotelDump folder
+3. Running Apache Tomcat
 
-#### Инструкция по запуску:
-Аутентификация с правами администратора:
-Email: dvstas@gmail.com
+#### Startup Instructions:
+Authentication with administrator rights: 
+Email: dvstas@gmail.com 
 Password: qwertyasvcb 
-Аутентификация с правами пользователя возможна после регистрации пользователя
+Authentication with user rights is possible after user registration
