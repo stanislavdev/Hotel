@@ -1,4 +1,4 @@
-# 20.System Hotel reservation
+# 20. Hotel reservation system
 The client fills out the Application, indicating the number of beds in the room, the class of the apartment and the time of stay. The Administrator reviews the received Application, selects the most suitable of the available Numbers, after which the system invoices the Customer.
 
 #### You need to build a web application that supports the following functionality:
